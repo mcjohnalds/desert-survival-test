@@ -9,11 +9,13 @@ var _mouse_mode_mismatch_count := 0
 @onready var _container: Node3D = $Container
 @onready var _main_menu: MainMenu = %MainMenu
 @onready var _menu_container: Control = %MenuContainer
+@onready var _player: KinematicFpsController = %Player
 
 
 func _ready() -> void:
 	_main_menu.resumed.connect(_unpause)
 	_main_menu.restarted.connect(restarted.emit)
+	_player.effect_created.connect(_on_effect_created)
 	set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
@@ -56,6 +58,10 @@ func _unpause() -> void:
 	_menu_container.visible = false
 	_main_menu.settings_open = false
 	set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+
+func _on_effect_created(effect: Node3D) -> void:
+	_container.add_child(effect)
 
 
 func set_mouse_mode(mode: Input.MouseMode) -> void:

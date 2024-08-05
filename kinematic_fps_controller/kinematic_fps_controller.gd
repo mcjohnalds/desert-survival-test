@@ -3,6 +3,8 @@ class_name KinematicFpsController
 
 signal effect_created(effect: Node3D)
 const _BULLET_IMPACT_SCENE := preload("res://common/metal_impact.tscn")
+const _AXE_SWING_COOLDOWN_DURATION := 0.5
+const _AXE_DISTANCE := 3.0
 @export_group("Audio")
 @export var material_audios: Array[MaterialAudio]
 @export var water_material_audio: MaterialAudio
@@ -103,6 +105,7 @@ const _BULLET_IMPACT_SCENE := preload("res://common/metal_impact.tscn")
 @export_group("Health")
 @export var max_health := 100.0
 @export var blood_vignette_change_speed := 3.0
+var _axe_swing_cooldown_remaining := 0.0
 var _sprint_energy := 1.0
 var _last_sprint_cooldown_at := -1000.0
 var _is_flying := false
@@ -162,19 +165,17 @@ var _active_inventory_item_index := -1
 @onready var _initial_weapon_position := _weapon.position
 @onready var _weapon_last_position := _weapon.position
 @onready var _health := max_health
+@onready var _axe: Node3D = %Axe
 
 
 func _ready() -> void:
 	_smoke.emitting = false
 	_update_muzzle_flash()
-	_inventory.append(InventoryItem.M4.new())
-	_inventory.append(InventoryItem.Grenade.new())
+	_inventory.append(InventoryItem.Axe.new())
 	for item_icon: ItemIcon in _inventory_item_icons.get_children():
 		item_icon.item_type = ItemViewer.ItemType.NONE
 	var item_icon_0: ItemIcon = _inventory_item_icons.get_child(0)
-	var item_icon_1: ItemIcon = _inventory_item_icons.get_child(1)
 	item_icon_0.item_type = ItemViewer.ItemType.CUBE
-	item_icon_1.item_type = ItemViewer.ItemType.SPHERE
 
 
 func _physics_process(delta: float) -> void:
@@ -294,6 +295,7 @@ func _physics_process(delta: float) -> void:
 	_update_camera_linear_velocity(delta)
 	_update_camera_angular_velocity(delta)
 	_update_gun_shooting(delta)
+	_update_axe(delta)
 	_update_muzzle_flash()
 	_update_blood_effects(delta)
 	_last_is_on_water = is_on_water
@@ -345,6 +347,8 @@ func _input(event: InputEvent) -> void:
 						script = "M4"
 					InventoryItem.Grenade:
 						script = "Grenade"
+					InventoryItem.Axe:
+						script = "Axe"
 				var model: Node3D = _weapon.get_node(script)
 				model.visible = true
 	if event is InputEventMouseMotion:
@@ -650,14 +654,37 @@ func _update_gun_shooting(delta: float) -> void:
 		_camera_linear_velocity += dlv * 1.0 * Vector3(1.0, 1.0, 1.2)
 		_camera_angular_velocity += dav * 0.05
 		if collision:
-			var impact: GPUParticles3D = _BULLET_IMPACT_SCENE.instantiate()
-			impact.position = collision.position
-			impact.one_shot = true
-			impact.emitting = true
-			effect_created.emit(impact)
+			var pos: Vector3 = collision.position
+			_create_bullet_impact(pos)
 	_smoke.emitting = (
 		Util.get_ticks_sec() - _gun_last_fired_at < smoke_lifetime
 	)
+
+
+func _update_axe(delta: float) -> void:
+	if _axe_swing_cooldown_remaining == 0.0:
+		_axe.rotation.x = deg_to_rad(-23.8)
+		if (
+			_primary_button_down
+			and _get_active_inventory_item() is InventoryItem.Axe
+		):
+			_axe_swing_cooldown_remaining = _AXE_SWING_COOLDOWN_DURATION
+			var query := PhysicsRayQueryParameters3D.new()
+			query.from = _camera.global_position
+			query.to = query.from + -_camera.global_basis.z * _AXE_DISTANCE
+			query.exclude = [self.get_rid()]
+			var collision := get_world_3d().direct_space_state.intersect_ray(
+				query
+			)
+			if collision:
+				var pos: Vector3 = collision.position
+				_create_bullet_impact(pos)
+	else:
+		_axe_swing_cooldown_remaining -= delta
+		_axe_swing_cooldown_remaining = maxf(
+			_axe_swing_cooldown_remaining, 0.0
+		)
+		_axe.rotation.x = deg_to_rad(-85.7)
 
 
 func _update_muzzle_flash() -> void:
@@ -735,6 +762,22 @@ func _damage(amount: float) -> void:
 	_blood_flash_alpha_target = 0.3
 
 
+func _get_active_inventory_item() -> InventoryItem:
+	if _active_inventory_item_index == -1:
+		return null
+	if _active_inventory_item_index >= _inventory.size():
+		return null
+	return _inventory[_active_inventory_item_index]
+
+
+func _create_bullet_impact(pos: Vector3) -> void:
+	var impact: GPUParticles3D = _BULLET_IMPACT_SCENE.instantiate()
+	impact.position = pos
+	impact.one_shot = true
+	impact.emitting = true
+	effect_created.emit(impact)
+
+
 func get_sprint_energy() -> float:
 	return _sprint_energy
 
@@ -747,4 +790,6 @@ class InventoryItem:
 	class M4 extends InventoryItem:
 		pass
 	class Grenade extends InventoryItem:
+		pass
+	class Axe extends InventoryItem:
 		pass

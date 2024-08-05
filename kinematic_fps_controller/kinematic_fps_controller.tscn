@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://2oxdgu03lnbk"]
+[gd_scene load_steps=62 format=3 uid="uid://2oxdgu03lnbk"]
 
 [ext_resource type="Script" path="res://kinematic_fps_controller/kinematic_fps_controller.gd" id="2_8r0nc"]
 [ext_resource type="Environment" uid="uid://b3cn01u84faiy" path="res://common/underwater_environment.tres" id="2_owsda"]
@@ -165,6 +165,19 @@ material = SubResource("StandardMaterial3D_k3mb8")
 
 [sub_resource type="PrismMesh" id="PrismMesh_2xykc"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h8u0l"]
+albedo_color = Color(1, 0.471333, 0.39, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_638ma"]
+material = SubResource("StandardMaterial3D_h8u0l")
+size = Vector3(0.1, 1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6dpg6"]
+albedo_color = Color(0.89, 0.89, 0.89, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_m3bc1"]
+material = SubResource("StandardMaterial3D_6dpg6")
+
 [node name="KinematicFpsController" type="CharacterBody3D"]
 floor_snap_length = 0.5
 script = ExtResource("2_8r0nc")
@@ -239,6 +252,18 @@ draw_pass_1 = SubResource("QuadMesh_cxfwg")
 transform = Transform3D(0.332514, 0, 0, 0, 0.332514, 0, 0, 0, 0.332514, 0, 0, 0)
 visible = false
 mesh = SubResource("PrismMesh_2xykc")
+
+[node name="Axe" type="Node3D" parent="Head/Camera3D/Weapon"]
+unique_name_in_owner = true
+transform = Transform3D(0.314245, -0.0297102, 0.000805788, 0.0268615, 0.287568, 0.127343, -0.0127203, -0.126709, 0.288818, 0, 0.079555, -0.0246105)
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Camera3D/Weapon/Axe"]
+mesh = SubResource("BoxMesh_638ma")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Head/Camera3D/Weapon/Axe"]
+transform = Transform3D(0.177061, 1.5299e-09, 3.90553e-09, 3.24111e-10, -3.51184e-08, 0.292987, 8.05753e-10, -0.42999, -9.82615e-09, 5.96046e-08, 0.418267, -0.0865058)
+mesh = SubResource("PrismMesh_m3bc1")
 
 [node name="HeadRayCast" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)

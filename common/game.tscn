@@ -38,7 +38,53 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Container"]
 environment = SubResource("Environment_fwqsi")
 
-[node name="KinematicFpsController" parent="Container" instance=ExtResource("3_m520b")]
+[node name="Player" parent="Container" instance=ExtResource("3_m520b")]
+unique_name_in_owner = true
+fov_change_speed = 20.0
+crouch_fov_multiplier = 0.99
+max_speed_fov_multiplier = 1.01
+vertical_horizontal_ratio = 2.0
+quake_camera_tilt_speed = 0.2
+quake_camera_tilt_angle_limit = 0.004
+gravity_multiplier = 1.5
+base_speed = 5.0
+back_speed = 0.6
+walk_acceleration = 5.0
+walk_deceleration = 9.0
+air_control = 0.2
+unlimited_sprint_energy = true
+sprint_speed_multiplier = 2.0
+sprint_seconds = 3.0
+sprint_regen_time = 6.0
+sprint_energy_jump_cost = 0.3
+step_interval = 4.0
+step_threshold = 0.5
+height_in_crouch = 1.0
+crouch_speed_multiplier = 0.7
+jump_height = 3.5
+fly_mode_speed_modifier = 2.0
+submerged_height = 0.36
+depth_on_water = 2.1
+floating_height = 0.75
+on_water_speed_multiplier = 0.75
+submerged_speed_multiplier = 0.5
+mouse_sensitivity = 8.0
+vertical_angle_limit = 1.50796
+camera_linear_pid_kp = 100.0
+camera_linear_pid_kd = 10.0
+camera_angular_pid_kp = 100.0
+camera_angular_pid_kd = 10.0
+muzzle_flash_lifetime = 0.05
+smoke_lifetime = 0.3
+max_bullet_range = 1000.0
+fire_rate = 10.0
+weapon_linear_pid_kp = 500.0
+weapon_linear_pid_kd = 50.0
+weapon_angular_pid_kp = 300.0
+weapon_angular_pid_kd = 20.0
+enable_shooting = true
+max_health = 100.0
+blood_vignette_change_speed = 3.0
 
 [node name="Ground" type="StaticBody3D" parent="Container"]
 

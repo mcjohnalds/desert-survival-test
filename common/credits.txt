@@ -1,0 +1,34 @@
+Code:
+
+Modular Character Controller (MIT) by Expresso Bits and Whimfoome.
+
+Music:
+
+Let's Rock (CC BY 3.0) by Alex-Productions.
+
+Fonts:
+
+Jaro (OFL) by Agyei Archer, Celine Hurka, Mirko Velimirović via Google Fonts.
+
+Turret Road (OFL) by Dale Sattler via Google Fonts.
+
+Chakra Petch (OFL) by Cadson Demak via Google Fonts.
+
+Sounds:
+
+UI Hover 1 (CC0) by wobesound via freesound.org.
+
+Click Button Battery Recharger Flashlight (CC0) by sweet_niche via
+freesound.org
+
+Crouching and getting up dress (CC0) by usamah via freesound.org.
+
+Models:
+
+Assault Rifle (CC0) by Quaternius via Poly Pizza.
+
+Images:
+
+Blood Vignette (CC0) by 7he1ndigo via DeivantArt.
+
+Dark grunge (CC BY 3.0) by kjpargeter via Freepik.

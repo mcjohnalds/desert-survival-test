@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=3 uid="uid://cw3kdnmso2ntw"]
+
+[ext_resource type="PackedScene" uid="uid://7vdx2q26wpr2" path="res://ui/custom_button.tscn" id="1_gigm5"]
+[ext_resource type="PackedScene" uid="uid://b55xr8elvsr3e" path="res://ui/custom_h_slider.tscn" id="2_mdtwq"]
+[ext_resource type="PackedScene" uid="uid://ff3oqsj7dv02" path="res://ui/custom_label.tscn" id="3_g460y"]
+[ext_resource type="PackedScene" uid="uid://bt1qqr8mqu70i" path="res://ui/custom_option_button.tscn" id="4_kcvbs"]
+[ext_resource type="Script" path="res://ui/custom_option_item.gd" id="5_qrkjg"]
+[ext_resource type="PackedScene" uid="uid://dg1jmayltrak5" path="res://ui/item_icon.tscn" id="6_kxmd1"]
+
+[sub_resource type="Resource" id="Resource_xxftg"]
+script = ExtResource("5_qrkjg")
+text = "yo"
+
+[sub_resource type="Resource" id="Resource_vx3p4"]
+script = ExtResource("5_qrkjg")
+text = "dawg"
+
+[sub_resource type="Resource" id="Resource_dl8oy"]
+script = ExtResource("5_qrkjg")
+text = "what"
+
+[node name="Demo" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(300, 2.08165e-12)
+layout_mode = 2
+
+[node name="Button" parent="VBoxContainer" instance=ExtResource("1_gigm5")]
+layout_mode = 2
+tooltip_text = "hello"
+
+[node name="HSlider" parent="VBoxContainer" instance=ExtResource("2_mdtwq")]
+layout_mode = 2
+tooltip_text = "hello"
+
+[node name="Label" parent="VBoxContainer" instance=ExtResource("3_g460y")]
+layout_mode = 2
+tooltip_text = "hello"
+mouse_filter = 0
+
+[node name="CustomOptionButton" parent="VBoxContainer" instance=ExtResource("4_kcvbs")]
+layout_mode = 2
+tooltip_text = "hello"
+items = Array[ExtResource("5_qrkjg")]([SubResource("Resource_xxftg"), SubResource("Resource_vx3p4"), SubResource("Resource_dl8oy")])
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="VBoxContainer/Control"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ItemIcon" parent="VBoxContainer/Control/Control" instance=ExtResource("6_kxmd1")]
+layout_mode = 1
+offset_right = 0.0
+offset_bottom = 0.0
+tooltip_text = "hello"

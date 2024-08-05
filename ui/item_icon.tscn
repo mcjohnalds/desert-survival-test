@@ -1,0 +1,71 @@
+[gd_scene load_steps=6 format=3 uid="uid://dg1jmayltrak5"]
+
+[ext_resource type="PackedScene" uid="uid://7vdx2q26wpr2" path="res://ui/custom_button.tscn" id="1_gyn8b"]
+[ext_resource type="Script" path="res://ui/item_icon.gd" id="1_re1f3"]
+[ext_resource type="PackedScene" uid="uid://dmlnfo4cdukb0" path="res://ui/item_viewer.tscn" id="2_373f8"]
+[ext_resource type="PackedScene" uid="uid://ff3oqsj7dv02" path="res://ui/custom_label.tscn" id="4_3thxf"]
+
+[sub_resource type="World3D" id="World3D_asdww"]
+
+[node name="ItemIcon" type="MarginContainer"]
+custom_minimum_size = Vector2(30, 30)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1092.0
+offset_bottom = -588.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_re1f3")
+
+[node name="Button" parent="." instance=ExtResource("1_gyn8b")]
+unique_name_in_owner = true
+layout_mode = 2
+text = ""
+
+[node name="Label" parent="Button/MarginContainer/HBoxContainer" index="2"]
+text = ""
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Button/Container" index="0"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="Button/Container/SubViewportContainer"]
+own_world_3d = true
+world_3d = SubResource("World3D_asdww")
+transparent_bg = true
+handle_input_locally = false
+msaa_3d = 1
+screen_space_aa = 1
+scaling_3d_scale = 1.0
+size = Vector2i(60, 60)
+render_target_update_mode = 4
+
+[node name="ItemViewer" parent="Button/Container/SubViewportContainer/SubViewport" instance=ExtResource("2_373f8")]
+unique_name_in_owner = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Button/Container" index="1"]
+layout_mode = 2
+offset_right = 60.0
+offset_bottom = 60.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Button/Container/MarginContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" parent="Button/Container/MarginContainer/VBoxContainer" instance=ExtResource("4_3thxf")]
+unique_name_in_owner = true
+layout_mode = 2
+text = ""
+horizontal_alignment = 2
+
+[editable path="Button"]

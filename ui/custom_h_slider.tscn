@@ -1,0 +1,91 @@
+[gd_scene load_steps=11 format=3 uid="uid://b55xr8elvsr3e"]
+
+[ext_resource type="Script" path="res://ui/custom_h_slider.gd" id="1_37cs7"]
+[ext_resource type="Material" uid="uid://csawxourd0ta3" path="res://ui/panel_material.tres" id="1_axufg"]
+[ext_resource type="Material" uid="uid://iboom6g2fuca" path="res://ui/label_material.tres" id="1_ptkph"]
+[ext_resource type="PackedScene" uid="uid://cajoor01jr72b" path="res://ui/hover.tscn" id="4_vgnpr"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_u5d64"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7m0we"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_50q8l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s381t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6loew"]
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b6kas"]
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="HSlider" type="MarginContainer"]
+offset_right = 100.0
+offset_bottom = 23.0
+mouse_filter = 0
+script = ExtResource("1_37cs7")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="Slider" type="HSlider" parent="MarginContainer"]
+unique_name_in_owner = true
+material = ExtResource("1_ptkph")
+layout_mode = 2
+mouse_filter = 1
+theme_override_icons/grabber = SubResource("ViewportTexture_u5d64")
+theme_override_icons/grabber_highlight = SubResource("ViewportTexture_u5d64")
+theme_override_styles/slider = SubResource("StyleBoxEmpty_7m0we")
+theme_override_styles/grabber_area = SubResource("StyleBoxEmpty_50q8l")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxEmpty_s381t")
+max_value = 1.0
+step = 0.001
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Slider"]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/Slider/MarginContainer"]
+material = ExtResource("1_axufg")
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6loew")
+
+[node name="Hover" parent="MarginContainer" instance=ExtResource("4_vgnpr")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+size = Vector2i(20, 31)
+
+[node name="MarginContainer" type="MarginContainer" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="Panel" type="Panel" parent="SubViewport/MarginContainer"]
+material = ExtResource("1_ptkph")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b6kas")

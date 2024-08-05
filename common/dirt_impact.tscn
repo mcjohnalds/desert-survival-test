@@ -1,0 +1,50 @@
+[gd_scene load_steps=8 format=3 uid="uid://yu283afprq74"]
+
+[ext_resource type="Texture2D" uid="uid://bq44ahcfkeg75" path="res://addons/kenney_particle_pack/smoke_03.png" id="1_ufu6r"]
+[ext_resource type="Script" path="res://common/custom_particles_3d.gd" id="2_fcqoy"]
+
+[sub_resource type="Curve" id="Curve_qx60y"]
+_data = [Vector2(0, 0.390335), 0.0, 1.89366, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_w5nsg"]
+curve = SubResource("Curve_qx60y")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6g6xl"]
+lifetime_randomness = 0.51
+angle_max = 360.0
+spread = 180.0
+initial_velocity_min = 1.5
+initial_velocity_max = 2.5
+gravity = Vector3(2.08165e-12, 2.08165e-12, 2.08165e-12)
+damping_max = 10.0
+scale_curve = SubResource("CurveTexture_w5nsg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j35yp"]
+transparency = 2
+alpha_scissor_threshold = 0.536
+alpha_antialiasing_mode = 0
+shading_mode = 0
+albedo_color = Color(0.698039, 0.521569, 0.396078, 1)
+albedo_texture = ExtResource("1_ufu6r")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_4bl81"]
+material = SubResource("StandardMaterial3D_j35yp")
+size = Vector2(5, 5)
+
+[node name="DirtHit" type="GPUParticles3D"]
+transform = Transform3D(1.77989, 0, 0, 0, 1.77989, 0, 0, 0, 1.77989, 0, 0, 0)
+amount = 1
+lifetime = 0.3
+explosiveness = 0.97
+randomness = 0.72
+visibility_aabb = AABB(-1.20099, -1.62748, -1.16894, 2.65504, 2.74925, 2.51821)
+process_material = SubResource("ParticleProcessMaterial_6g6xl")
+draw_pass_1 = SubResource("QuadMesh_4bl81")
+script = ExtResource("2_fcqoy")
+free_after_lifetime = true

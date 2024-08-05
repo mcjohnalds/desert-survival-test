@@ -1,0 +1,95 @@
+[gd_scene load_steps=12 format=3 uid="uid://dop6qbt6vroii"]
+
+[ext_resource type="Script" path="res://custom_joint/custom_joint_3d.gd" id="1_k5ink"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_au1mq"]
+radius = 0.2
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0kiky"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1877c"]
+noise = SubResource("FastNoiseLite_0kiky")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g4ol0"]
+transparency = 1
+blend_mode = 4
+albedo_color = Color(0, 0, 1, 0.498039)
+albedo_texture = SubResource("NoiseTexture2D_1877c")
+
+[sub_resource type="SphereMesh" id="SphereMesh_abcsc"]
+material = SubResource("StandardMaterial3D_g4ol0")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vwjv2"]
+radius = 0.25
+height = 1.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wrcgw"]
+transparency = 1
+blend_mode = 4
+albedo_color = Color(0, 1, 0, 0.498039)
+albedo_texture = SubResource("NoiseTexture2D_1877c")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_vbga5"]
+material = SubResource("StandardMaterial3D_wrcgw")
+radius = 0.25
+height = 1.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ewuqu"]
+transparency = 1
+blend_mode = 4
+albedo_color = Color(1, 0, 0, 0.498039)
+albedo_texture = SubResource("NoiseTexture2D_1877c")
+
+[sub_resource type="SphereMesh" id="SphereMesh_j5km4"]
+material = SubResource("StandardMaterial3D_ewuqu")
+radius = 0.2
+height = 0.4
+
+[node name="CustomJoint3D" type="Node3D"]
+script = ExtResource("1_k5ink")
+
+[node name="Head" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.25, 2.08165e-12)
+shape = SubResource("SphereShape3D_au1mq")
+
+[node name="CameraAnchor" type="Node3D" parent="Head"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head"]
+transform = Transform3D(0.998632, 0, 0, 0, 0.998632, 0, 0, 0, 0.998632, 2.08165e-12, 0.25, 2.08165e-12)
+mesh = SubResource("SphereMesh_abcsc")
+
+[node name="Body" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+collision_layer = 4
+mass = 6.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.625, 2.08165e-12)
+shape = SubResource("CapsuleShape3D_vwjv2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.625, 2.08165e-12)
+mesh = SubResource("CapsuleMesh_vbga5")
+
+[node name="Roller" type="RigidBody3D" parent="."]
+collision_layer = 8
+mass = 3.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Roller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.25, 2.08165e-12)
+shape = SubResource("SphereShape3D_au1mq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Roller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.25, 2.08165e-12)
+mesh = SubResource("SphereMesh_j5km4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.75, 0)
+top_level = true

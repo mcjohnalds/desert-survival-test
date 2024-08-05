@@ -1,0 +1,157 @@
+[gd_scene load_steps=16 format=3 uid="uid://7vdx2q26wpr2"]
+
+[ext_resource type="Material" uid="uid://csawxourd0ta3" path="res://ui/panel_material.tres" id="1_8lepr"]
+[ext_resource type="Script" path="res://ui/custom_button.gd" id="1_ltvm2"]
+[ext_resource type="Material" uid="uid://iiwldhvqbj52" path="res://ui/panel_primary_material.tres" id="3_5gh4g"]
+[ext_resource type="Material" uid="uid://iboom6g2fuca" path="res://ui/label_material.tres" id="3_iq0h2"]
+[ext_resource type="PackedScene" uid="uid://ff3oqsj7dv02" path="res://ui/custom_label.tscn" id="3_sa45u"]
+[ext_resource type="Texture2D" uid="uid://n6rfrhsw5pe0" path="res://ui/unchecked.svg" id="4_v0hda"]
+[ext_resource type="Texture2D" uid="uid://i52q8vkqdqo" path="res://ui/check.svg" id="5_1yx7s"]
+[ext_resource type="Texture2D" uid="uid://b5wmfn8yb4e16" path="res://ui/back_icon.svg" id="7_728cj"]
+[ext_resource type="Texture2D" uid="uid://bo2r3bl1sjdgs" path="res://ui/dropdown_icon.svg" id="7_sd7oc"]
+[ext_resource type="PackedScene" uid="uid://cajoor01jr72b" path="res://ui/hover.tscn" id="9_apg18"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dbkkx"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_dp4o1"]
+blend_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_np1hd"]
+draw_center = false
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.116127, 0.116127, 0.116127, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_hpimh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nu3v"]
+bg_color = Color(0.108721, 0.108721, 0.108721, 0.802)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.11, 0.11, 0.11, 0.888)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="Button" type="MarginContainer"]
+material = ExtResource("1_8lepr")
+offset_right = 17.0
+offset_bottom = 31.0
+script = ExtResource("1_ltvm2")
+text = "Button"
+_default_material = ExtResource("1_8lepr")
+_primary_material = ExtResource("3_5gh4g")
+
+[node name="Background" type="Panel" parent="."]
+unique_name_in_owner = true
+material = ExtResource("1_8lepr")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dbkkx")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_type_variation = &"MarginContainerMedium"
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Checkbox" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 4
+
+[node name="Unchecked" type="TextureRect" parent="MarginContainer/HBoxContainer/Checkbox"]
+material = ExtResource("3_iq0h2")
+layout_mode = 2
+texture = ExtResource("4_v0hda")
+expand_mode = 3
+
+[node name="Check" type="TextureRect" parent="MarginContainer/HBoxContainer/Checkbox"]
+unique_name_in_owner = true
+visible = false
+material = ExtResource("3_iq0h2")
+layout_mode = 2
+texture = ExtResource("5_1yx7s")
+expand_mode = 3
+
+[node name="BackIcon" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 1
+theme_override_constants/margin_bottom = 6
+
+[node name="Check" type="TextureRect" parent="MarginContainer/HBoxContainer/BackIcon"]
+material = ExtResource("3_iq0h2")
+layout_mode = 2
+texture = ExtResource("7_728cj")
+expand_mode = 3
+
+[node name="Label" parent="MarginContainer/HBoxContainer" instance=ExtResource("3_sa45u")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Button"
+horizontal_alignment = 1
+
+[node name="Chevron" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_bottom = 5
+
+[node name="Chevron" type="TextureRect" parent="MarginContainer/HBoxContainer/Chevron"]
+material = ExtResource("3_iq0h2")
+layout_mode = 2
+texture = ExtResource("7_sd7oc")
+expand_mode = 3
+
+[node name="Container" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Outline" type="Panel" parent="."]
+visible = false
+material = SubResource("CanvasItemMaterial_dp4o1")
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_np1hd")
+
+[node name="Disabled" type="Panel" parent="."]
+unique_name_in_owner = true
+visible = false
+material = SubResource("CanvasItemMaterial_hpimh")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5nu3v")
+
+[node name="Hover" parent="." instance=ExtResource("9_apg18")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2

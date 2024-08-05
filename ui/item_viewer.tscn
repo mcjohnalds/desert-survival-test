@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmlnfo4cdukb0"]
+
+[ext_resource type="Script" path="res://ui/item_viewer.gd" id="1_rgfww"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ehyyr"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_o1n2e"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_hhdwf"]
+
+[node name="ItemViewer" type="Node3D"]
+script = ExtResource("1_rgfww")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.353553, 0.612373, 3.02058e-16, 0.866025, 0.5, -0.707107, -0.353553, 0.612373, 1, 0.82, 1)
+projection = 1
+fov = 53.5
+size = 1.59
+near = 0.01
+far = 100.0
+
+[node name="ItemContainer" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="Cube" type="Node3D" parent="ItemContainer"]
+unique_name_in_owner = true
+
+[node name="Model" type="MeshInstance3D" parent="ItemContainer/Cube"]
+transform = Transform3D(0.587166, 5.30311e-09, -1.07556e-09, 9.23593e-09, 0.587166, 9.23593e-09, -1.07556e-09, 5.30311e-09, 0.587166, 1.89642e-07, -4.76837e-07, 7.04334e-08)
+mesh = SubResource("BoxMesh_ehyyr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ItemContainer/Cube"]
+transform = Transform3D(0.0464263, -0.499461, 0.865092, 8.23298e-09, 0.866026, 0.499999, -0.998922, -0.0232134, 0.0402065, 1.19209e-07, 4.99999, 4.33681e-19)
+
+[node name="Sphere" type="Node3D" parent="ItemContainer"]
+unique_name_in_owner = true
+visible = false
+
+[node name="Model" type="MeshInstance3D" parent="ItemContainer/Sphere"]
+transform = Transform3D(0.928093, 8.38227e-09, -1.70007e-09, 1.45986e-08, 0.928093, 1.45986e-08, -1.70007e-09, 8.38227e-09, 0.928093, 1.89642e-07, -4.76837e-07, 7.04334e-08)
+mesh = SubResource("SphereMesh_o1n2e")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ItemContainer/Sphere"]
+transform = Transform3D(0.0464265, -0.49946, 0.865092, -5.29239e-09, 0.866026, 0.499999, -0.998922, -0.0232132, 0.0402065, 1.19209e-07, 4.99999, 4.33681e-19)
+
+[node name="Torus" type="Node3D" parent="ItemContainer"]
+unique_name_in_owner = true
+visible = false
+
+[node name="Model" type="MeshInstance3D" parent="ItemContainer/Torus"]
+transform = Transform3D(0.647781, 5.85057e-09, -1.1866e-09, 1.01894e-08, 0.647781, 1.01894e-08, -1.1866e-09, 5.85057e-09, 0.647781, 1.89642e-07, -4.76837e-07, 7.04334e-08)
+mesh = SubResource("TorusMesh_hhdwf")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ItemContainer/Torus"]
+transform = Transform3D(0.0464265, -0.49946, 0.865092, -5.29239e-09, 0.866026, 0.499999, -0.998922, -0.0232132, 0.0402065, 1.19209e-07, 4.99999, 4.33681e-19)

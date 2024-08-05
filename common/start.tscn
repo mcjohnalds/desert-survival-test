@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://r2qgkt8jfxd8"]
+
+[ext_resource type="Script" path="res://common/start.gd" id="1_e6t8m"]
+[ext_resource type="PackedScene" uid="uid://4xgl4drja75q" path="res://ui/main_menu.tscn" id="1_t3jnr"]
+[ext_resource type="PackedScene" uid="uid://c2t6smyr8xtty" path="res://kinematic_fps_controller/example.tscn" id="2_sd55q"]
+
+[node name="Start" type="Node"]
+script = ExtResource("1_e6t8m")
+
+[node name="Background" type="Node3D" parent="."]
+
+[node name="Example" parent="Background" instance=ExtResource("2_sd55q")]
+process_mode = 4
+
+[node name="Pivot" type="Node3D" parent="Background"]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera3D" parent="Background/Pivot"]
+transform = Transform3D(0.705278, -0.62093, 0.342095, 0, 0.482551, 0.875868, -0.708931, -0.61773, 0.340332, 4.88811, 16.6117, 4.83648)
+current = true
+fov = 72.2
+
+[node name="MainMenu" parent="." instance=ExtResource("1_t3jnr")]
+unique_name_in_owner = true

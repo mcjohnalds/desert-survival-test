@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://cajoor01jr72b"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_wtt2q"]
+blend_mode = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xodai"]
+bg_color = Color(0.162066, 0.162066, 0.162065, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="Hover" type="Panel"]
+material = SubResource("CanvasItemMaterial_wtt2q")
+anchors_preset = -1
+anchor_right = 0.007
+anchor_bottom = 0.006
+offset_right = -8.064
+offset_bottom = -3.888
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xodai")

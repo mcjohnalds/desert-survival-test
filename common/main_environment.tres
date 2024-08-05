@@ -1,0 +1,11 @@
+[gd_resource type="Environment" load_steps=2 format=3 uid="uid://cj5a4clofvpeq"]
+
+[ext_resource type="Sky" uid="uid://d1lrdwghb86fs" path="res://common/sky.tres" id="1_li5tu"]
+
+[resource]
+background_mode = 2
+sky = ExtResource("1_li5tu")
+tonemap_mode = 2
+fog_enabled = true
+fog_density = 0.0025
+volumetric_fog_density = 0.02

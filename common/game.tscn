@@ -1,0 +1,65 @@
+[gd_scene load_steps=10 format=3 uid="uid://d1y8jdicca0ja"]
+
+[ext_resource type="Script" path="res://common/game.gd" id="1_nixut"]
+[ext_resource type="Material" uid="uid://cv05ul0jjqhnd" path="res://common/grass.tres" id="2_ulwjl"]
+[ext_resource type="PackedScene" uid="uid://4xgl4drja75q" path="res://ui/main_menu.tscn" id="3_3ao77"]
+[ext_resource type="PackedScene" uid="uid://2oxdgu03lnbk" path="res://kinematic_fps_controller/kinematic_fps_controller.tscn" id="3_m520b"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_67cj5"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_w2c31"]
+sky_material = SubResource("ProceduralSkyMaterial_67cj5")
+
+[sub_resource type="Environment" id="Environment_fwqsi"]
+background_mode = 2
+sky = SubResource("Sky_w2c31")
+tonemap_mode = 2
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_v3p5i"]
+material = ExtResource("2_ulwjl")
+size = Vector2(100, 100)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fnrog"]
+size = Vector3(100, 1, 100)
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_nixut")
+
+[node name="Container" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Container"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Container"]
+environment = SubResource("Environment_fwqsi")
+
+[node name="KinematicFpsController" parent="Container" instance=ExtResource("3_m520b")]
+
+[node name="Ground" type="StaticBody3D" parent="Container"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Container/Ground"]
+mesh = SubResource("PlaneMesh_v3p5i")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Container/Ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_fnrog")
+
+[node name="MenuContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMenu" parent="MenuContainer" instance=ExtResource("3_3ao77")]
+unique_name_in_owner = true
+layout_mode = 2
+pause_menu = true

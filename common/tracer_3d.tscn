@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dvepobheadtv4"]
+
+[ext_resource type="Script" path="res://common/tracer_3d.gd" id="1_18mmw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8d8ic"]
+shading_mode = 0
+albedo_color = Color(5.907, 3.686, 2.824, 1)
+disable_receive_shadows = true
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_va2qk"]
+material = SubResource("StandardMaterial3D_8d8ic")
+top_radius = 0.007
+bottom_radius = 0.007
+height = 1.0
+
+[node name="Tracer3D" type="Node3D"]
+script = ExtResource("1_18mmw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0.5)
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_va2qk")

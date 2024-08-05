@@ -1,0 +1,238 @@
+[gd_scene load_steps=22 format=3 uid="uid://4xgl4drja75q"]
+
+[ext_resource type="Script" path="res://ui/main_menu.gd" id="1_7s8hv"]
+[ext_resource type="PackedScene" uid="uid://ff3oqsj7dv02" path="res://ui/custom_label.tscn" id="2_0emkm"]
+[ext_resource type="PackedScene" uid="uid://7vdx2q26wpr2" path="res://ui/custom_button.tscn" id="2_ov1kc"]
+[ext_resource type="PackedScene" uid="uid://b55xr8elvsr3e" path="res://ui/custom_h_slider.tscn" id="3_0d4lc"]
+[ext_resource type="FontFile" uid="uid://dnuikshmkv3b" path="res://ui/jaro_36pt_regular.ttf" id="3_nutcb"]
+[ext_resource type="PackedScene" uid="uid://bt1qqr8mqu70i" path="res://ui/custom_option_button.tscn" id="3_smgye"]
+[ext_resource type="Shader" path="res://common/gaussian_blur.gdshader" id="3_yftg1"]
+[ext_resource type="FontFile" uid="uid://bvi0lhpwxksn" path="res://ui/turret_road_bold.ttf" id="4_3if03"]
+[ext_resource type="Script" path="res://ui/custom_option_item.gd" id="4_akuoj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kgf3c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3guu7"]
+shader = ExtResource("3_yftg1")
+shader_parameter/blurriness = 8.0
+shader_parameter/iterations = 16
+shader_parameter/quality = 4
+
+[sub_resource type="Resource" id="Resource_grdyi"]
+script = ExtResource("4_akuoj")
+text = "Disabled"
+
+[sub_resource type="Resource" id="Resource_iu57r"]
+script = ExtResource("4_akuoj")
+text = "Enabled"
+
+[sub_resource type="Resource" id="Resource_2s0gh"]
+script = ExtResource("4_akuoj")
+text = "Disabled"
+
+[sub_resource type="Resource" id="Resource_r00xt"]
+script = ExtResource("4_akuoj")
+text = "Enabled"
+
+[sub_resource type="Resource" id="Resource_8s0y6"]
+script = ExtResource("4_akuoj")
+text = "Adaptive"
+
+[sub_resource type="Resource" id="Resource_7ahjb"]
+script = ExtResource("4_akuoj")
+text = "Mailbox"
+
+[sub_resource type="Resource" id="Resource_vvlhp"]
+script = ExtResource("4_akuoj")
+text = "Low"
+
+[sub_resource type="Resource" id="Resource_c3von"]
+script = ExtResource("4_akuoj")
+text = "Medium"
+
+[sub_resource type="Resource" id="Resource_0qxi6"]
+script = ExtResource("4_akuoj")
+text = "High"
+
+[sub_resource type="Resource" id="Resource_js14g"]
+script = ExtResource("4_akuoj")
+text = "Insane"
+
+[node name="MainMenu" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_kgf3c")
+script = ExtResource("1_7s8hv")
+
+[node name="GaussianBlur" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_3guu7")
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(400, 330)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" parent="CenterContainer/VBoxContainer/TitleContainer" instance=ExtResource("2_0emkm")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_nutcb")
+theme_override_font_sizes/font_size = 32
+text = "Godot Temple"
+type = 4
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer/TitleContainer"]
+layout_mode = 2
+
+[node name="ButtonsContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StartButton" parent="CenterContainer/VBoxContainer/ButtonsContainer" instance=ExtResource("2_ov1kc")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start"
+primary = true
+
+[node name="ResumeButton" parent="CenterContainer/VBoxContainer/ButtonsContainer" instance=ExtResource("2_ov1kc")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Resume"
+primary = true
+
+[node name="RestartButton" parent="CenterContainer/VBoxContainer/ButtonsContainer" instance=ExtResource("2_ov1kc")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "Restart"
+
+[node name="SettingsButton" parent="CenterContainer/VBoxContainer/ButtonsContainer" instance=ExtResource("2_ov1kc")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Settings"
+
+[node name="QuitButton" parent="CenterContainer/VBoxContainer/ButtonsContainer" instance=ExtResource("2_ov1kc")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quit"
+
+[node name="SettingsContainer" type="VBoxContainer" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer/SettingsContainer"]
+layout_mode = 2
+
+[node name="BackButton" parent="CenterContainer/VBoxContainer/SettingsContainer/MarginContainer2" instance=ExtResource("2_ov1kc")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_bottom = 4
+text = "Back"
+back_icon = true
+
+[node name="Label" parent="CenterContainer/VBoxContainer/SettingsContainer" instance=ExtResource("2_0emkm")]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_3if03")
+theme_override_font_sizes/font_size = 20
+text = "Settings"
+type = 1
+
+[node name="MouseSensitivity" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Label" parent="CenterContainer/VBoxContainer/SettingsContainer/MouseSensitivity" instance=ExtResource("2_0emkm")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mouse sensitivity"
+
+[node name="MouseSensitivitySlider" parent="CenterContainer/VBoxContainer/SettingsContainer/MouseSensitivity" instance=ExtResource("3_0d4lc")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EffectsVolume" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Label" parent="CenterContainer/VBoxContainer/SettingsContainer/EffectsVolume" instance=ExtResource("2_0emkm")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Effects volume"
+
+[node name="EffectsVolumeSlider" parent="CenterContainer/VBoxContainer/SettingsContainer/EffectsVolume" instance=ExtResource("3_0d4lc")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MusicVolume" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Label" parent="CenterContainer/VBoxContainer/SettingsContainer/MusicVolume" instance=ExtResource("2_0emkm")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Music	 volume"
+
+[node name="MusicVolumeSlider" parent="CenterContainer/VBoxContainer/SettingsContainer/MusicVolume" instance=ExtResource("3_0d4lc")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InvertMouse" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Label" parent="CenterContainer/VBoxContainer/SettingsContainer/InvertMouse" instance=ExtResource("2_0emkm")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Invert mouse"
+
+[node name="InvertMouseOptionButton" parent="CenterContainer/VBoxContainer/SettingsContainer/InvertMouse" instance=ExtResource("3_smgye")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+items = Array[ExtResource("4_akuoj")]([SubResource("Resource_grdyi"), SubResource("Resource_iu57r")])
+
+[node name="VsyncOption" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SettingsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Label" parent="CenterContainer/VBoxContainer/SettingsContainer/VsyncOption" instance=ExtResource("2_0emkm")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vsync"
+
+[node name="VsyncOptionButton" parent="CenterContainer/VBoxContainer/SettingsContainer/VsyncOption" instance=ExtResource("3_smgye")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+items = Array[ExtResource("4_akuoj")]([SubResource("Resource_2s0gh"), SubResource("Resource_r00xt"), SubResource("Resource_8s0y6"), SubResource("Resource_7ahjb")])
+
+[node name="PerformancePreset" type="HBoxContainer" parent="CenterContainer/VBoxContainer/SettingsContainer"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[node name="Label" parent="CenterContainer/VBoxContainer/SettingsContainer/PerformancePreset" instance=ExtResource("2_0emkm")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Graphics Preset"
+
+[node name="PerformancePresetOptionButton" parent="CenterContainer/VBoxContainer/SettingsContainer/PerformancePreset" instance=ExtResource("3_smgye")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+items = Array[ExtResource("4_akuoj")]([SubResource("Resource_vvlhp"), SubResource("Resource_c3von"), SubResource("Resource_0qxi6"), SubResource("Resource_js14g")])

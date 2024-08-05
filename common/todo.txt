@@ -1,0 +1,56 @@
+- Axe item
+  - Click to swing
+  - Wait a moment for swing to return to player's hand before swing again
+- Water level
+  - Simple label UI
+- Dig
+  - World is a 1000x1000 heightmap
+  - Dig to reduce nearest 4 points on heightmap by a semi random amount
+  - Digging a vertex is more effective when nearby vertexes have a y height
+    that is lower than the vertex being dug
+- Groundwater
+  - Groundwater is a hemisphere of water underground
+  - Periodically makes noise
+  - If not fun, add more features like cuttable roots and nearby greenery. If
+    fun, move those as todos later in this list.
+- Player health works like CoD
+  - Auto-regen if not taken damage for 1 second
+- Lizard enemy
+  - Idle state, attack state when player gets in cone of vision
+  - Attack state
+    - Run toward player
+    - When collide with player, do damage then pause for a moment
+  - Hitting with axe reduces health and stuns lizard for a moment
+    - Requires good timing
+- Home
+  - Walls and roof
+  - Interactable door
+    - Open/close
+      - Just toggle visibility
+    - Close to block lizard
+    - If enemy unable to reach player for 30 seconds, go back to spawn point
+    - Enemy has footstep sound
+- Water decreases over time
+- Day/night cycle
+  - Environment
+  - Lighting
+  - Enemy is in explore state at night
+    - Run around
+  - During day, go back to spawn
+  - Drain less water at night
+- Water bottle item
+  - Limited "ammo"
+  - Drink to restore water level
+  - Use on water source to fill
+- Grabbable scrap metal
+  - Grabbable item
+- Grabbable blueprint
+  - Grabbable item
+  - Disappears with message on grab
+- Divining rod
+  - Crafting UI
+  - When equipped, tilts toward water sources
+- Building to explore
+  - Contains scrap metal and blueprint
+- Make axe create impact effect
+  - Make axe animation different depending on whether axe hit something

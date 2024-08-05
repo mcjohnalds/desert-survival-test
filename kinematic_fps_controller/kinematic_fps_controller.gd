@@ -105,6 +105,7 @@ const _AXE_DISTANCE := 3.0
 @export_group("Health")
 @export var max_health := 100.0
 @export var blood_vignette_change_speed := 3.0
+var _water := 100.0
 var _axe_swing_cooldown_remaining := 0.0
 var _sprint_energy := 1.0
 var _last_sprint_cooldown_at := -1000.0
@@ -166,6 +167,7 @@ var _active_inventory_item_index := -1
 @onready var _weapon_last_position := _weapon.position
 @onready var _health := max_health
 @onready var _axe: Node3D = %Axe
+@onready var _misc_label: CustomLabel = %MiscLabel
 
 
 func _ready() -> void:
@@ -298,6 +300,7 @@ func _physics_process(delta: float) -> void:
 	_update_axe(delta)
 	_update_muzzle_flash()
 	_update_blood_effects(delta)
+	_misc_label.text = "Water: %.f%%" % _water
 	_last_is_on_water = is_on_water
 	_last_is_floating = is_floating
 	_last_is_submerged = is_submerged

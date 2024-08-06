@@ -94,17 +94,17 @@ func dig(position_world: Vector3, radius: int, height: float) -> void:
 	var image := old_texture.get_image()
 	var m := width / 2.0
 	var position_image := Vector2(
-		remap(position_world.x, -m, m, -0.5, image.get_width() + 0.5),
-		remap(position_world.z, -m, m, -0.5, image.get_width() + 0.5)
-	).round()
-	for x in range(position_image.x - radius, position_image.x + radius):
-		for y in range(position_image.y - radius, position_image.y + radius):
-			var old_r := image.get_pixel(x, y).r
-			var old_height := old_r * max_height
-			var new_height := maxf(old_height - height, 0.0)
-			var new_r := new_height / max_height
-			image.set_pixel(x, y, Color(new_r, 0.0, 0.0, 1.0))
-			var h: HeightMapShape3D = shape.shape
-			h.map_data[image.get_width() * y + x] = new_height
+		remap(position_world.x, -m, m, 0.0, image.get_width()),
+		remap(position_world.z, -m, m, 0.0, image.get_width())
+	)
+	var x := floori(position_image.x)
+	var y := floori(position_image.y)
+	var old_r := image.get_pixel(x, y).r
+	var old_height := old_r * max_height
+	var new_height := maxf(old_height - height, 0.0)
+	var new_r := new_height / max_height
+	image.set_pixel(x, y, Color(new_r, 0.0, 0.0, 1.0))
+	var h: HeightMapShape3D = shape.shape
+	h.map_data[image.get_width() * y + x] = new_height
 	var image_texture := ImageTexture.create_from_image(image)
 	terrain_material.set_shader_parameter("height_map", image_texture)

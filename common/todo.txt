@@ -1,9 +1,3 @@
-- Dig
-  - [x] World is a 1000x1000 heightmap
-  - [x] Dig to reduce nearest 4 points on heightmap
-  - [ ] Make dig amount semi random
-  - [ ] Digging a vertex is more effective when nearby vertexes have a y height
-    that is lower than the vertex being dug
 - Groundwater
   - Groundwater is a hemisphere of water underground
   - Periodically makes noise
@@ -51,3 +45,5 @@
 - Make axe create impact effect
   - Make axe animation different depending on whether axe hit something
 - Player starts with hand then unlocks axe
+- Digging a vertex is more effective when nearby vertexes have a y height that
+  is lower than the vertex being dug

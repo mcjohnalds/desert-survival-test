@@ -1,7 +1,8 @@
 - Dig
-  - World is a 1000x1000 heightmap
-  - Dig to reduce nearest 4 points on heightmap by a semi random amount
-  - Digging a vertex is more effective when nearby vertexes have a y height
+  - [x] World is a 1000x1000 heightmap
+  - [x] Dig to reduce nearest 4 points on heightmap
+  - [ ] Make dig amount semi random
+  - [ ] Digging a vertex is more effective when nearby vertexes have a y height
     that is lower than the vertex being dug
 - Groundwater
   - Groundwater is a hemisphere of water underground

@@ -3,8 +3,8 @@ class_name KinematicFpsController
 
 signal effect_created(effect: Node3D)
 const _BULLET_IMPACT_SCENE := preload("res://common/metal_impact.tscn")
-const _AXE_SWING_COOLDOWN_DURATION := 0.5
-const _AXE_DISTANCE := 3.0
+const _AXE_SWING_COOLDOWN_DURATION := 0.05
+const _AXE_DISTANCE := 4.0
 @export_group("Audio")
 @export var material_audios: Array[MaterialAudio]
 @export var water_material_audio: MaterialAudio
@@ -324,6 +324,25 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_released("move_crouch"):
 		_uncrouch_audio_stream_player.stream = uncrouch_audios.pick_random()
 		_uncrouch_audio_stream_player.play()
+	if (
+		event.is_action_pressed("primary")
+		and _axe_swing_cooldown_remaining == 0.0
+		and _get_active_inventory_item() is InventoryItem.Axe
+	):
+		_axe_swing_cooldown_remaining = _AXE_SWING_COOLDOWN_DURATION
+		var query := PhysicsRayQueryParameters3D.new()
+		query.from = _camera.global_position
+		query.to = query.from + -_camera.global_basis.z * _AXE_DISTANCE
+		query.exclude = [self.get_rid()]
+		var collision := get_world_3d().direct_space_state.intersect_ray(
+			query
+		)
+		if collision:
+			var pos: Vector3 = collision.position
+			_create_bullet_impact(pos)
+			if collision.collider is Terrain:
+				var terrain: Terrain = collision.collider
+				terrain.dig(pos, 1, 0.4)
 	if event is InputEventKey:
 		var event_key: InputEventKey = event
 		if (
@@ -667,21 +686,6 @@ func _update_gun_shooting(delta: float) -> void:
 func _update_axe(delta: float) -> void:
 	if _axe_swing_cooldown_remaining == 0.0:
 		_axe.rotation.x = deg_to_rad(-23.8)
-		if (
-			_primary_button_down
-			and _get_active_inventory_item() is InventoryItem.Axe
-		):
-			_axe_swing_cooldown_remaining = _AXE_SWING_COOLDOWN_DURATION
-			var query := PhysicsRayQueryParameters3D.new()
-			query.from = _camera.global_position
-			query.to = query.from + -_camera.global_basis.z * _AXE_DISTANCE
-			query.exclude = [self.get_rid()]
-			var collision := get_world_3d().direct_space_state.intersect_ray(
-				query
-			)
-			if collision:
-				var pos: Vector3 = collision.position
-				_create_bullet_impact(pos)
 	else:
 		_axe_swing_cooldown_remaining -= delta
 		_axe_swing_cooldown_remaining = maxf(

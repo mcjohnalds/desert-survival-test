@@ -1,7 +1,7 @@
 extends Node3D
 
 @onready var camera: Camera3D = $Camera3D
-@onready var custom_joint: CustomJoint = $CustomJoint
+@onready var custom_joint: CustomJoint3D = $CustomJoint
 
 
 func _ready() -> void:

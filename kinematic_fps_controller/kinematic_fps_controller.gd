@@ -168,6 +168,7 @@ var _active_inventory_item_index := -1
 @onready var _health := max_health
 @onready var _axe: Node3D = %Axe
 @onready var _misc_label: CustomLabel = %MiscLabel
+@onready var _potion_drink_asp: AudioStreamPlayer = %PotionDrinkASP
 
 
 func _ready() -> void:
@@ -300,6 +301,7 @@ func _physics_process(delta: float) -> void:
 	_update_axe(delta)
 	_update_muzzle_flash()
 	_update_blood_effects(delta)
+	_water -= delta
 	_misc_label.text = "Water: %.f%%" % _water
 	_last_is_on_water = is_on_water
 	_last_is_floating = is_floating
@@ -339,10 +341,15 @@ func _input(event: InputEvent) -> void:
 		)
 		if collision:
 			var pos: Vector3 = collision.position
-			_create_bullet_impact(pos)
 			if collision.collider is Terrain:
+				_create_bullet_impact(pos)
 				var terrain: Terrain = collision.collider
 				terrain.dig(pos, 1, 0.4)
+			if collision.collider is Groundwater:
+				var groundwater: Groundwater = collision.collider
+				groundwater.queue_free()
+				_water = 100.0
+				_potion_drink_asp.play()
 	if event is InputEventKey:
 		var event_key: InputEventKey = event
 		if (

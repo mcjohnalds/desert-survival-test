@@ -38,6 +38,9 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -3, 2.08165e-12)
 
+[node name="GroundwaterContainer" type="Node3D" parent="Container"]
+unique_name_in_owner = true
+
 [node name="MenuContainer" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false

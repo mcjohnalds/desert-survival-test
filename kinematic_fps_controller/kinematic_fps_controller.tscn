@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://2oxdgu03lnbk"]
+[gd_scene load_steps=64 format=3 uid="uid://2oxdgu03lnbk"]
 
 [ext_resource type="Script" path="res://kinematic_fps_controller/kinematic_fps_controller.gd" id="2_8r0nc"]
 [ext_resource type="Environment" uid="uid://b3cn01u84faiy" path="res://common/underwater_environment.tres" id="2_owsda"]
@@ -36,6 +36,7 @@
 [ext_resource type="Texture2D" uid="uid://ce517bxpauorg" path="res://ui/blood_flash.webp" id="35_gwmon"]
 [ext_resource type="Texture2D" uid="uid://b8o6731eyjxtr" path="res://ui/crosshair.svg" id="35_xwe6x"]
 [ext_resource type="PackedScene" uid="uid://ff3oqsj7dv02" path="res://ui/custom_label.tscn" id="36_d2k17"]
+[ext_resource type="AudioStream" uid="uid://bwu52k4bvp6yr" path="res://common/potion_drink.ogg" id="37_7wmlp"]
 
 [sub_resource type="Resource" id="Resource_ju83a"]
 script = ExtResource("10_3id2w")
@@ -391,3 +392,7 @@ size_flags_vertical = 8
 text = "Label
 "
 vertical_alignment = 2
+
+[node name="PotionDrinkASP" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("37_7wmlp")

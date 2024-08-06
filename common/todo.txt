@@ -1,8 +1,6 @@
-- Groundwater
-  - Groundwater is a hemisphere of water underground
-  - Periodically makes noise
-  - If not fun, add more features like cuttable roots and nearby greenery. If
-    fun, move those as todos later in this list.
+- Make groundwater more quiet depending on how much dirt there is between the
+  camera and the groundwater
+  - Also change tone of sound
 - Player health works like CoD
   - Auto-regen if not taken damage for 1 second
 - Lizard enemy
@@ -47,3 +45,5 @@
 - Player starts with hand then unlocks axe
 - Digging a vertex is more effective when nearby vertexes have a y height that
   is lower than the vertex being dug
+- Sometimes, the player has to cut through roots to dig further
+- Groundwater is more likely under especially dense and green patches of grass

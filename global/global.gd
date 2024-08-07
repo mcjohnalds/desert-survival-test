@@ -3,6 +3,10 @@ class_name Global
 
 signal graphics_preset_changed
 enum GraphicsPreset { LOW, MEDIUM, HIGH, INSANE }
+enum PhysicsLayer {
+	DEFAULT = 1 << 0,
+	DOOR = 1 << 1,
+}
 @export var environments: Array[Environment] = []
 var mouse_sensitivity := 0.25
 var invert_mouse := false

@@ -1,8 +1,5 @@
 - Home
   - Interactable door
-    - Open/close
-      - Just toggle visibility
-    - Close to block lizard
     - If enemy unable to reach player for 30 seconds, go back to spawn point
     - Enemy has footstep sound
 - Water decreases over time

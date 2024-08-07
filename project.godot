@@ -134,6 +134,16 @@ spawn_enemy={
 ]
 }
 
+[layer_names]
+
+3d_render/layer_1="default"
+3d_render/layer_2="door"
+3d_navigation/layer_1="default"
+
+[navigation]
+
+3d/default_cell_size=0.05
+
 [physics]
 
 3d/physics_engine="JoltPhysics3D"

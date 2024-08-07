@@ -25,7 +25,9 @@ func _ready() -> void:
 	_main_menu.restarted.connect(restarted.emit)
 	_player.effect_created.connect(_on_effect_created)
 	_player.attempted_spawn_enemy.connect(_on_attempted_spawn_enemy)
-	_player.move_and_slide_collision.connect(_on_player_move_and_slide_collision)
+	_player.move_and_slide_collision.connect(
+		_on_player_move_and_slide_collision
+	)
 	set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	for i in 100:
 		var groundwater: Groundwater = _GROUNDWATER_SCENE.instantiate()

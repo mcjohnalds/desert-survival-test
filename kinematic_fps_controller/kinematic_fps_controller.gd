@@ -369,6 +369,19 @@ func _input(event: InputEvent) -> void:
 				groundwater.queue_free()
 				_water = 100.0
 				_potion_drink_asp.play()
+			if collision.collider is Door:
+				var door: Door = collision.collider
+				door.open = not door.open
+				if door.open:
+					door.visible = false
+					door.collision_layer = Global.PhysicsLayer.DOOR
+				else:
+					door.visible = true
+					door.collision_layer = (
+						Global.PhysicsLayer.DEFAULT | Global.PhysicsLayer.DOOR
+					)
+			else:
+				_create_bullet_impact(pos)
 	if event is InputEventKey:
 		var event_key: InputEventKey = event
 		if (

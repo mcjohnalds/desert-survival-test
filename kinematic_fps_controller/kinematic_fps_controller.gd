@@ -2,6 +2,8 @@ extends CharacterBody3D
 class_name KinematicFpsController
 
 signal effect_created(effect: Node3D)
+signal attempted_spawn_enemy(collision: Dictionary)
+signal move_and_slide_collision(collision: KinematicCollision3D)
 const _BULLET_IMPACT_SCENE := preload("res://common/metal_impact.tscn")
 const _AXE_SWING_COOLDOWN_DURATION := 0.05
 const _AXE_DISTANCE := 4.0
@@ -310,7 +312,9 @@ func _physics_process(delta: float) -> void:
 	# No idea why but self sometimes gets scaled a little bit and we have to
 	# reset it or else move_and_slide will error
 	scale = Vector3.ONE
-	move_and_slide()
+	var collided := move_and_slide()
+	if collided:
+		move_and_slide_collision.emit()
 
 
 func _input(event: InputEvent) -> void:
@@ -326,6 +330,15 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_released("move_crouch"):
 		_uncrouch_audio_stream_player.stream = uncrouch_audios.pick_random()
 		_uncrouch_audio_stream_player.play()
+	if event.is_action_pressed("spawn_enemy"):
+		var query := PhysicsRayQueryParameters3D.new()
+		query.from = _camera.global_position
+		query.to = query.from + -_camera.global_basis.z * 1000.0
+		query.exclude = [self.get_rid()]
+		var collision := get_world_3d().direct_space_state.intersect_ray(
+			query
+		)
+		attempted_spawn_enemy.emit(collision)
 	if (
 		event.is_action_pressed("primary")
 		and _axe_swing_cooldown_remaining == 0.0
@@ -399,7 +412,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and OS.is_debug_build():
 		var e: InputEventKey = event
 		if e.keycode == KEY_L and e.pressed:
-			_damage(10.0)
+			damage(10.0)
 
 
 func _update_quake_camera_tilt(
@@ -761,7 +774,7 @@ func _update_head_bob_cycle_position(
 		)
 
 
-func _damage(amount: float) -> void:
+func damage(amount: float) -> void:
 	_health -= amount
 	_health = maxf(_health, 0.0)
 	var r := Vector3(

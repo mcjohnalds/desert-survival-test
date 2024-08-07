@@ -310,3 +310,22 @@ static func draw_arc_filled(
 			center + Vector2(cos(angle_point), sin(angle_point)) * radius
 		)
 	canvas_item.draw_polygon(points_arc, colors)
+
+
+static func get_character_body_3d_slide_collisions(
+	body: CharacterBody3D
+) -> Array[CharacterBody3DSlideCollision]:
+	var result: Array[CharacterBody3DSlideCollision] = []
+	for i in body.get_slide_collision_count():
+		var collision := body.get_slide_collision(i)
+		for j in collision.get_collision_count():
+			var c := CharacterBody3DSlideCollision.new()
+			c.collision = collision
+			c.collider = collision.get_collider(j)
+			result.push_back(c)
+	return result
+
+
+class CharacterBody3DSlideCollision:
+	var collision: KinematicCollision3D
+	var collider: Object

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://custom_joint/example.gd" id="1_kokka"]
 [ext_resource type="Script" path="res://common/custom_directional_light_3d.gd" id="2_0rg01"]
-[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/main_environment.tres" id="2_btcu4"]
+[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/day_environment.tres" id="2_btcu4"]
 [ext_resource type="Material" uid="uid://cv05ul0jjqhnd" path="res://common/grass.tres" id="2_nsg21"]
 [ext_resource type="PackedScene" uid="uid://dop6qbt6vroii" path="res://custom_joint/custom_joint_3d.tscn" id="3_2l8jc"]
 

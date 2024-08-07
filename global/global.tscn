@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://idnj4bqpji60"]
 
 [ext_resource type="Script" path="res://global/global.gd" id="1_32b4u"]
-[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/main_environment.tres" id="2_mbtoh"]
+[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/day_environment.tres" id="2_mbtoh"]
 [ext_resource type="Environment" uid="uid://b3cn01u84faiy" path="res://common/underwater_environment.tres" id="3_wkdx8"]
-[ext_resource type="AudioStream" path="res://common/lets_rock.ogg" id="4_02urj"]
+[ext_resource type="AudioStream" uid="uid://dh2owhvphvakd" path="res://common/lets_rock.ogg" id="4_02urj"]
 [ext_resource type="AudioStream" uid="uid://rg14x6oq0iuk" path="res://ui/click.ogg" id="5_8o0j6"]
 [ext_resource type="AudioStream" uid="uid://bg64steelgu51" path="res://ui/hover.ogg" id="6_dwgba"]
 [ext_resource type="AudioStream" uid="uid://0ad01uoajntn" path="res://ui/click_small.ogg" id="6_qhp4v"]

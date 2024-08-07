@@ -37,5 +37,5 @@ bus = &"Effects"
 
 [node name="RoarASP" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_x85af")
-volume_db = -5.0
+volume_db = -9.0
 bus = &"Effects"

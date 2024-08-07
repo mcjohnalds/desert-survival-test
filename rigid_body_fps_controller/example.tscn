@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://rigid_body_fps_controller/example.gd" id="1_ppver"]
 [ext_resource type="Material" uid="uid://cv05ul0jjqhnd" path="res://common/grass.tres" id="1_qkqk3"]
 [ext_resource type="PackedScene" uid="uid://dx0l2eirb1rdq" path="res://rigid_body_fps_controller/rigid_body_fps_controller.tscn" id="2_ic7uj"]
-[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/main_environment.tres" id="2_onkeh"]
+[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/day_environment.tres" id="2_onkeh"]
 [ext_resource type="Script" path="res://common/custom_directional_light_3d.gd" id="2_stcey"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_hnte1"]

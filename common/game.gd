@@ -4,17 +4,20 @@ class_name Game
 signal restarted
 const _GROUNDWATER_SCENE := preload("res://common/groundwater.tscn")
 const _LIZARD_SCENE := preload("res://common/lizard.tscn")
+const _DAY_ENVIRONMENT := preload("res://common/day_environment.tres")
+const _NIGHT_ENVIRONMENT := preload("res://common/night_environment.tres")
 const _NAV_UPDATE_TARGET_DURATION := 0.2
 const _LIZARD_MAX_RUN_SPEED := 5.0
 const _LIZARD_FINISHED_ATTACKING_PLAYER_DURATION := 17.0
 const _LIZARD_CHASE_DISTANCE := 15.0
 const _LIZARD_ACCELERATION := 25.0
 const _LIZARD_FOOTSTEP_DISTANCE := 2.0
-const _LIZARD_ROAR_COOLDOWN_DURATION := 5.0
+const _LIZARD_ROAR_COOLDOWN_DURATION := 10.0
 var _paused := false
 var _desired_mouse_mode := Input.MOUSE_MODE_VISIBLE
 var _mouse_mode_mismatch_count := 0
 var _time := 0.0
+var _is_night := false
 @onready var _container: Node3D = $Container
 @onready var _main_menu: MainMenu = %MainMenu
 @onready var _menu_container: Control = %MenuContainer
@@ -22,6 +25,9 @@ var _time := 0.0
 @onready var _terrain: Terrain = %Terrain
 @onready var _groundwater_container: Node3D = %GroundwaterContainer
 @onready var _lizard_container: Node3D = %LizardContainer
+@onready var _day_light: DirectionalLight3D = %DayLight
+@onready var _night_light: DirectionalLight3D = %NightLight
+@onready var _world_environment: WorldEnvironment = %WorldEnvironment
 
 
 func _ready() -> void:
@@ -72,6 +78,16 @@ func _physics_process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("toggle_day_night"):
+		_is_night = not _is_night
+		if _is_night:
+			_world_environment.environment = _NIGHT_ENVIRONMENT
+			_night_light.visible = true
+			_day_light.visible = false
+		else:
+			_world_environment.environment = _DAY_ENVIRONMENT
+			_night_light.visible = false
+			_day_light.visible = true
 	if event.is_action_pressed("ui_cancel"):
 		if _paused:
 			# In a browser, we can only capture the mouse on a mouse click

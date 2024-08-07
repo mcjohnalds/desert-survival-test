@@ -1,8 +1,4 @@
-- Slight enemy damage cooldown
-- Water decreases over time
 - Day/night cycle
-  - Environment
-  - Lighting
   - Enemy is in explore state at night
     - Run around
   - During day, go back to spawn
@@ -43,3 +39,4 @@
 - Make lizard rotate better when navigating through a doorway
 - Make AI move faster when attacking
 - Make lizard rotate to face target when heading home
+- Slight enemy damage cooldown

@@ -11,7 +11,7 @@
 [ext_resource type="PhysicsMaterial" path="res://kinematic_fps_controller/physics/wood.tres" id="8_04xdu"]
 [ext_resource type="Material" uid="uid://c72msuxs6n2a8" path="res://kinematic_fps_controller/materials/leaves.tres" id="8_fcbu8"]
 [ext_resource type="Material" uid="uid://ckvcdcn2iue87" path="res://kinematic_fps_controller/materials/wood.tres" id="11_cakef"]
-[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/main_environment.tres" id="12_5juut"]
+[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/day_environment.tres" id="12_5juut"]
 [ext_resource type="Script" path="res://common/custom_directional_light_3d.gd" id="13_a1mlj"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_mctgj"]

@@ -1,6 +1,7 @@
-[gd_scene load_steps=14 format=3 uid="uid://d1y8jdicca0ja"]
+[gd_scene load_steps=12 format=3 uid="uid://d1y8jdicca0ja"]
 
 [ext_resource type="Script" path="res://common/game.gd" id="1_nixut"]
+[ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/day_environment.tres" id="2_d8gdf"]
 [ext_resource type="PackedScene" uid="uid://cdevl400jk456" path="res://common/terrain.tscn" id="3_0vj7r"]
 [ext_resource type="PackedScene" uid="uid://4xgl4drja75q" path="res://ui/main_menu.tscn" id="3_3ao77"]
 [ext_resource type="PackedScene" uid="uid://2oxdgu03lnbk" path="res://kinematic_fps_controller/kinematic_fps_controller.tscn" id="3_m520b"]
@@ -13,20 +14,6 @@ geometry_parsed_geometry_type = 1
 geometry_collision_mask = 4294967041
 cell_size = 0.05
 agent_radius = 0.2
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_67cj5"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_w2c31"]
-sky_material = SubResource("ProceduralSkyMaterial_67cj5")
-
-[sub_resource type="Environment" id="Environment_fwqsi"]
-background_mode = 2
-sky = SubResource("Sky_w2c31")
-tonemap_mode = 2
-ssao_enabled = true
-glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jk4q4"]
 albedo_color = Color(0.38, 0.25726, 0.1862, 1)
@@ -47,12 +34,22 @@ script = ExtResource("1_nixut")
 
 [node name="Container" type="Node3D" parent="."]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Container"]
+[node name="DayLight" type="DirectionalLight3D" parent="Container"]
+unique_name_in_owner = true
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 shadow_enabled = true
 
+[node name="NightLight" type="DirectionalLight3D" parent="Container"]
+unique_name_in_owner = true
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+visible = false
+light_color = Color(0.945098, 1, 1, 1)
+light_energy = 0.2
+shadow_enabled = true
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Container"]
-environment = SubResource("Environment_fwqsi")
+unique_name_in_owner = true
+environment = ExtResource("2_d8gdf")
 
 [node name="Player" parent="Container" instance=ExtResource("3_m520b")]
 unique_name_in_owner = true

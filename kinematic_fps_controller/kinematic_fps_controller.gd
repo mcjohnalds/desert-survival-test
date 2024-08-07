@@ -107,6 +107,9 @@ const _AXE_DISTANCE := 4.0
 @export_group("Health")
 @export var max_health := 100.0
 @export var blood_vignette_change_speed := 3.0
+@export var health_regen_rate := 5.0
+@export var health_regen_delay := 20.0
+var _health_regen_cooldown := 0.0
 var _water := 100.0
 var _axe_swing_cooldown_remaining := 0.0
 var _sprint_energy := 1.0
@@ -304,6 +307,7 @@ func _physics_process(delta: float) -> void:
 	_update_axe(delta)
 	_update_muzzle_flash()
 	_update_blood_effects(delta)
+	_update_health_regen(delta)
 	_water -= delta
 	_misc_label.text = "Water: %.f%%" % _water
 	_last_is_on_water = is_on_water
@@ -789,6 +793,7 @@ func damage(amount: float) -> void:
 	_weapon_linear_velocity += r * 0.2
 	_weapon_angular_velocity += Vector3(r.y, r.x, randf_range(-3.0, 3.0))
 	_blood_flash_alpha_target = 0.3
+	_health_regen_cooldown = health_regen_delay
 	if _health <= 0.0:
 		_health = 0.0
 		_death_overlay.visible = true
@@ -809,6 +814,16 @@ func _create_bullet_impact(pos: Vector3) -> void:
 	impact.one_shot = true
 	impact.emitting = true
 	effect_created.emit(impact)
+
+
+func _update_health_regen(delta: float) -> void:
+	if _health_regen_cooldown > 0.0:
+		_health_regen_cooldown -= delta
+	if _health_regen_cooldown <= 0.0:
+		_health_regen_cooldown = 0.0
+		_health += health_regen_rate * delta
+		if _health > max_health:
+			_health = max_health
 
 
 func get_sprint_energy() -> float:

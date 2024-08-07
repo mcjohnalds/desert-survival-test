@@ -1,5 +1,3 @@
-- Player health works like CoD
-  - Auto-regen if not taken damage for 1 second
 - Home
   - Walls and roof
   - Interactable door
@@ -44,3 +42,4 @@
 - Rebake nav when terrain changes
 - Hitting with axe reduces health and stuns lizard for a moment
   - Requires high skill to win fight, should be a last resort
+- Should I allow the player to dig defensive trenches?

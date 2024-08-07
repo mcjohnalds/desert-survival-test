@@ -71,7 +71,7 @@ const _AXE_DISTANCE := 4.0
 @export var jump_height := 3.5
 @export_group("Fly")
 ## Speed multiplier when fly mode is actived
-@export var fly_mode_speed_modifier := 2.0
+@export var fly_mode_speed_modifier := 4.0
 @export_group("Swim")
 ## Minimum height for [CharacterController3D] to be completely submerged in
 ## water.
@@ -196,7 +196,7 @@ func _physics_process(delta: float) -> void:
 	var input_sprint := false
 	var input_jump := false
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		if Input.is_action_just_pressed("fly"):
+		if OS.is_debug_build() and Input.is_action_just_pressed("fly"):
 			_is_flying = not _is_flying
 		input_horizontal = Input.get_vector(
 			"move_left", "move_right", "move_backward", "move_forward"

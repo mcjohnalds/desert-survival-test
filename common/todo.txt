@@ -1,13 +1,12 @@
 Tasks:
 
-- Only nearest groundwater should make noise
-- Lizard model
-- Lizard animations
-- Lizard animation blending
 - Water bottle item
   - Limited "ammo"
   - Drink to restore water level
   - Use on water source to fill
+- Lizard model
+- Lizard animations
+- Lizard animation blending
 - Grabbable scrap metal
   - Grabbable item
 - Grabbable blueprint
@@ -45,6 +44,7 @@ Tasks:
   - Maybe regen when not dug for a while
   - Maybe regen when player is away
   - Maybe gradual
+- dig() doesn't work well when clicking on the middle of a large slope
 
 Big ideas:
 
@@ -54,3 +54,6 @@ Big ideas:
 - Game is viscerally enjoyable early and late game
 - Hook player into wanting to dominate the night
 - Make the night scary during early game
+- Maybe make everything doable with dumb button mashing - but also reward
+  higher displays of skill
+- Maybe don't make the player die, instead, reward players for not dying

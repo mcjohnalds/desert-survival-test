@@ -43,6 +43,7 @@ func _ready() -> void:
 		_on_player_move_and_slide_collision
 	)
 	set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	await _terrain.regen()
 	for i in 100:
 		var groundwater: Groundwater = _GROUNDWATER_SCENE.instantiate()
 		groundwater.position.x = randf_range(
@@ -51,11 +52,13 @@ func _ready() -> void:
 		groundwater.position.z = randf_range(
 			-_terrain.width / 2.0, _terrain.width / 2.0
 		)
-		var h := _terrain.get_height_at_position(groundwater.position)
-		groundwater.position.y = (
-			_terrain.position.y + h - randf_range(0.1, 1.0)
+		var initial_height := _terrain.get_height_at_position(
+			groundwater.position
 		)
-		groundwater.position.y = _terrain.position.y + randf_range(0.1, 0.9)
+		var random_height := randf_range(-0.1, -_terrain.max_dig_depth + 0.1)
+		groundwater.position.y = (
+			_terrain.position.y + initial_height + random_height
+		)
 		_groundwater_container.add_child(groundwater)
 
 
@@ -71,23 +74,48 @@ func _physics_process(delta: float) -> void:
 		_mouse_mode_mismatch_count = 0
 	if _mouse_mode_mismatch_count > 10:
 		_pause()
-	for groundwater: Groundwater in _groundwater_container.get_children():
-		var id := groundwater.get_instance_id()
-		# db varies between -40.0 and 0.0 see
-		# https://www.desmos.com/calculator/ldvrpomret
-		var db :=  -10 + 10.0 * pow(sin(100.0 * id + TAU / 8.0 * _time), 1.2)
-		if is_nan(db):
-			db = -20.0
-		groundwater.muffled_trickle_asp.volume_db = db
-		groundwater.trickle_asp.volume_db = db
 	for lizard: Lizard in _lizard_container.get_children():
 		_update_lizard(lizard, delta)
 	_time += delta
 	_update_water_drain(delta)
+	var nearest: Groundwater = null
+	for groundwater: Groundwater in _groundwater_container.get_children():
+		if nearest == null:
+			nearest = groundwater
+			continue
+		var groundwater_dist := _player.global_position.distance_to(
+			groundwater.global_position
+		)
+		var nearest_dist := _player.global_position.distance_to(
+			nearest.global_position
+		)
+		if groundwater_dist < nearest_dist:
+			nearest = groundwater
+	for groundwater: Groundwater in _groundwater_container.get_children():
+		if groundwater == nearest:
+			var id := groundwater.get_instance_id()
+			# db varies between -40.0 and 0.0 see
+			# https://www.desmos.com/calculator/ldvrpomret
+			var db :=  (
+				-10 + 10.0 * pow(sin(100.0 * id + TAU / 8.0 * _time), 1.2)
+			)
+			if is_nan(db):
+				db = -20.0
+			db = 0.0
+			groundwater.muffled_trickle_asp.volume_db = db
+			groundwater.trickle_asp.volume_db = db
+		else:
+			groundwater.muffled_trickle_asp.volume_db = -80.0
+			groundwater.trickle_asp.volume_db = -80.0
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("toggle_day_night"):
+	if OS.is_debug_build() and event.is_action_pressed("toggle_wireframe"):
+		if get_viewport().debug_draw == Viewport.DEBUG_DRAW_DISABLED:
+			get_viewport().debug_draw = Viewport.DEBUG_DRAW_WIREFRAME
+		elif get_viewport().debug_draw == Viewport.DEBUG_DRAW_WIREFRAME:
+			get_viewport().debug_draw = Viewport.DEBUG_DRAW_DISABLED
+	if OS.is_debug_build() and event.is_action_pressed("toggle_day_night"):
 		_is_night = not _is_night
 		if _is_night:
 			_world_environment.environment = _NIGHT_ENVIRONMENT

@@ -393,6 +393,12 @@ text = "Label
 "
 vertical_alignment = 2
 
+[node name="DeathOverlay" type="ColorRect" parent="MarginContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
 [node name="PotionDrinkASP" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("37_7wmlp")

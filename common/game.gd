@@ -132,6 +132,7 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 		)
 		lizard.velocity = new_velocity_xz + current_velocity_y
 	lizard.velocity.y -= Util.get_default_gravity() * delta
+	lizard.scale = Vector3.ONE
 	var collided := lizard.move_and_slide()
 	if lizard.is_on_floor():
 		lizard.velocity.y = 0.0
@@ -203,7 +204,7 @@ func _on_player_move_and_slide_collision() -> void:
 
 
 func _on_player_lizard_collision(lizard: Lizard) -> void:
-	_player.damage(1.0)
+	_player.damage(20.0)
 	var player_xz := Vector3(
 		_player.global_position.x,
 		0.0,

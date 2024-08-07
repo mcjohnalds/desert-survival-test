@@ -171,6 +171,7 @@ var _active_inventory_item_index := -1
 @onready var _axe: Node3D = %Axe
 @onready var _misc_label: CustomLabel = %MiscLabel
 @onready var _potion_drink_asp: AudioStreamPlayer = %PotionDrinkASP
+@onready var _death_overlay: Control = %DeathOverlay
 
 
 func _ready() -> void:
@@ -310,7 +311,8 @@ func _physics_process(delta: float) -> void:
 	_last_is_submerged = is_submerged
 	_last_is_on_floor = is_on_floor()
 	# No idea why but self sometimes gets scaled a little bit and we have to
-	# reset it or else move_and_slide will error
+	# reset it or else move_and_slide will error. I suspect it's a bug with
+	# godot-jolt.
 	scale = Vector3.ONE
 	var collided := move_and_slide()
 	if collided:
@@ -787,6 +789,10 @@ func damage(amount: float) -> void:
 	_weapon_linear_velocity += r * 0.2
 	_weapon_angular_velocity += Vector3(r.y, r.x, randf_range(-3.0, 3.0))
 	_blood_flash_alpha_target = 0.3
+	if _health <= 0.0:
+		_health = 0.0
+		_death_overlay.visible = true
+		process_mode = PROCESS_MODE_DISABLED
 
 
 func _get_active_inventory_item() -> InventoryItem:

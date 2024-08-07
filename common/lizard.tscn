@@ -27,4 +27,3 @@ navigation_layers = 3
 avoidance_enabled = true
 height = 0.5
 radius = 1.0
-max_speed = 5.0

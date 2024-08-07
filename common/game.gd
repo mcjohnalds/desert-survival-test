@@ -4,7 +4,9 @@ class_name Game
 signal restarted
 const _GROUNDWATER_SCENE := preload("res://common/groundwater.tscn")
 const _LIZARD_SCENE := preload("res://common/lizard.tscn")
-const _ENEMY_NAV_COOLDOWN_DURATION := 0.2
+const _NAV_UPDATE_TARGET_DURATION := 0.2
+const _LIZARD_MAX_RUN_SPEED := 5.0
+const _LIZARD_FINISHED_ATTACKING_PLAYER_DURATION := 10.0
 const _LIZARD_CHASE_DISTANCE := 15.0
 const _LIZARD_ACCELERATION := 25.0
 var _paused := false
@@ -116,28 +118,28 @@ func _on_enemy_velocity_computed(
 
 
 func _update_lizard(lizard: Lizard, delta: float) -> void:
-	lizard.nav_cooldown -= delta
-	var target_velocity_xz: Vector3
 	match lizard.state:
 		Lizard.State.IDLE:
-			target_velocity_xz = _update_lizard_idle(lizard, delta)
+			_update_lizard_idle(lizard, delta)
 		Lizard.State.ATTACK:
-			target_velocity_xz = _update_lizard_attack(lizard, delta)
+			_update_lizard_attack(lizard, delta)
+		Lizard.State.RETURN_HOME:
+			_update_lizard_return_home(lizard, delta)
 	if lizard.is_on_floor():
-		var current_velocity_xz := Vector3(
-			lizard.velocity.x, 0.0, lizard.velocity.z
+		var lizard_velocity_xz := lizard.velocity * Vector3(1.0, 0.0, 1.0)
+		var safe_velocity_xz := lizard.safe_velocity * Vector3(1.0, 0.0, 1.0)
+		var new_velocity_xz := lizard_velocity_xz.move_toward(
+			safe_velocity_xz, _LIZARD_ACCELERATION * delta
 		)
-		var current_velocity_y := Vector3(0.0, lizard.velocity.y, 0.0)
-		var accel := _LIZARD_ACCELERATION
-		var new_velocity_xz := current_velocity_xz.move_toward(
-			target_velocity_xz, accel * delta
-		)
-		lizard.velocity = new_velocity_xz + current_velocity_y
-	lizard.velocity.y -= Util.get_default_gravity() * delta
+		var lizard_velocity_y := lizard.velocity.y * Vector3(0.0, 1.0, 1.0)
+		lizard.velocity = new_velocity_xz + lizard_velocity_y
+	else:
+		lizard.velocity.y -= Util.get_default_gravity() * delta
 	lizard.scale = Vector3.ONE
 	var collided := lizard.move_and_slide()
 	if lizard.is_on_floor():
 		lizard.velocity.y = 0.0
+	_update_lizard_nav_agent_velocity(lizard, delta)
 	# Player collision handling
 	if not collided:
 		return
@@ -150,50 +152,64 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 	_on_player_lizard_collision(lizard)
 
 
-func _update_lizard_idle(lizard: Lizard, delta: float) -> Vector3:
+func _update_lizard_idle(lizard: Lizard, delta: float) -> void:
 	var close_to_player := (
 		lizard.global_position.distance_to(_player.global_position)
 		<= _LIZARD_CHASE_DISTANCE
 	)
 	if close_to_player:
 		lizard.state = Lizard.State.ATTACK
-		lizard.nav_cooldown = 0.0
-	var target_velocity_xz := Vector3.ZERO
-	return target_velocity_xz
+		lizard.nav_update_target_cooldown = 0.0
+		lizard.finished_attacking_player_cooldown = (
+			_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
+		)
 
 
-func _update_lizard_attack(lizard: Lizard, delta: float) -> Vector3:
+func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
+	lizard.nav_update_target_cooldown -= delta
+	if lizard.nav_update_target_cooldown <= 0.0:
+		lizard.nav_update_target_cooldown = _NAV_UPDATE_TARGET_DURATION
+		lizard.nav_agent.target_position = _player.global_position
+	lizard.finished_attacking_player_cooldown -= delta
 	var close_to_player := (
 		lizard.global_position.distance_to(_player.global_position)
 		<= _LIZARD_CHASE_DISTANCE
 	)
+	if not close_to_player or lizard.finished_attacking_player_cooldown <= 0.0:
+		lizard.state = Lizard.State.RETURN_HOME
+		lizard.nav_agent.target_position = lizard.home
+		lizard.nav_update_target_cooldown = 0.0
 	var lizard_xz := Util.get_vector3_xz(lizard.global_position)
 	var player_xz := Util.get_vector3_xz(_player.global_position)
 	var target_rotation_y := -lizard_xz.angle_to_point(player_xz) + 0.25 * TAU
 	lizard.rotation.y = lerp_angle(
 		lizard.rotation.y, target_rotation_y, 2.0 * delta
 	)
-	if lizard.nav_cooldown <= 0.0:
-		lizard.nav_cooldown = _ENEMY_NAV_COOLDOWN_DURATION
-		lizard.nav_agent.target_position = _player.global_position
-	if not lizard.nav_agent.is_navigation_finished():
-		var next := lizard.nav_agent.get_next_path_position()
-		lizard.nav_agent.velocity = (
-			lizard.nav_agent.max_speed
-			* lizard.global_position.direction_to(next)
-		)
-	if not close_to_player:
+
+
+func _update_lizard_return_home(lizard: Lizard, delta: float) -> void:
+	if lizard.nav_agent.is_navigation_finished():
 		lizard.state = Lizard.State.IDLE
-		lizard.nav_agent.target_position = lizard.global_position
-	var safe_velocity_xz := Vector3(
-		lizard.safe_velocity.x, 0.0, lizard.safe_velocity.z
+
+
+func _update_lizard_nav_agent_velocity(lizard: Lizard, delta: float) -> void:
+	var target_velocity_xz: Vector3
+	if lizard.nav_agent.is_navigation_finished():
+		target_velocity_xz = Vector3.ZERO
+	else:
+		var next := lizard.nav_agent.get_next_path_position()
+		var dir_xz := (
+			lizard.global_position.direction_to(next)
+			* Vector3(1.0, 0.0, 1.0)
+		).normalized()
+		target_velocity_xz = dir_xz * _LIZARD_MAX_RUN_SPEED
+	var lizard_velocity_xz := lizard.velocity * Vector3(1.0, 0.0, 1.0)
+	var next_desired_velocity_xz := lizard_velocity_xz.move_toward(
+		target_velocity_xz, _LIZARD_ACCELERATION * delta
 	)
-	var target_velocity_xz := (
-		# TODO: do i need the minf?
-		minf(lizard.nav_agent.max_speed, lizard.safe_velocity.length())
-		* safe_velocity_xz.normalized()
+	lizard.nav_agent.velocity = (
+		next_desired_velocity_xz + lizard.velocity.y * Vector3(0.0, 1.0, 0.0)
 	)
-	return target_velocity_xz
 
 
 func _on_player_move_and_slide_collision() -> void:

@@ -1,7 +1,5 @@
-- Home
-  - Interactable door
-    - If enemy unable to reach player for 30 seconds, go back to spawn point
-    - Enemy has footstep sound
+- Enemy has footstep sound
+- Slight enemy damage cooldown
 - Water decreases over time
 - Day/night cycle
   - Environment
@@ -39,3 +37,7 @@
 - Hitting with axe reduces health and stuns lizard for a moment
   - Requires high skill to win fight, should be a last resort
 - Should I allow the player to dig defensive trenches?
+- Improve AI state transition trigger logic
+  - Prevent player from exploiting the fact that the AI will not attack when
+    returning home
+  - Reset finish attacking player cooldown when damage is done or received

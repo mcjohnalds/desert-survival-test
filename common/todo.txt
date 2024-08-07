@@ -1,8 +1,8 @@
 - Day/night cycle
-  - Enemy is in explore state at night
-    - Run around
-  - During day, go back to spawn
   - Drain less water at night
+- Lizard model
+- Lizard animations
+- Lizard animation blending
 - Water bottle item
   - Limited "ammo"
   - Drink to restore water level

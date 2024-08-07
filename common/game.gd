@@ -6,13 +6,15 @@ const _GROUNDWATER_SCENE := preload("res://common/groundwater.tscn")
 const _LIZARD_SCENE := preload("res://common/lizard.tscn")
 const _DAY_ENVIRONMENT := preload("res://common/day_environment.tres")
 const _NIGHT_ENVIRONMENT := preload("res://common/night_environment.tres")
-const _NAV_UPDATE_TARGET_DURATION := 0.2
+const _NAV_UPDATE_PLAYER_TARGET_DURATION := 0.2
+const _NAV_NEW_EXPLORE_TARGET_DURATION := 10.0
 const _LIZARD_MAX_RUN_SPEED := 5.0
 const _LIZARD_FINISHED_ATTACKING_PLAYER_DURATION := 17.0
 const _LIZARD_CHASE_DISTANCE := 15.0
 const _LIZARD_ACCELERATION := 25.0
 const _LIZARD_FOOTSTEP_DISTANCE := 2.0
 const _LIZARD_ROAR_COOLDOWN_DURATION := 10.0
+const _LIZARD_EXPLORE_DISTANCE := 15.0
 var _paused := false
 var _desired_mouse_mode := Input.MOUSE_MODE_VISIBLE
 var _mouse_mode_mismatch_count := 0
@@ -143,6 +145,8 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 			_update_lizard_attack(lizard, delta)
 		Lizard.State.RETURN_HOME:
 			_update_lizard_return_home(lizard, delta)
+		Lizard.State.EXPLORE:
+			_update_lizard_explore(lizard, delta)
 	if lizard.is_on_floor():
 		var lizard_velocity_xz := lizard.velocity * Vector3(1.0, 0.0, 1.0)
 		var safe_velocity_xz := lizard.safe_velocity * Vector3(1.0, 0.0, 1.0)
@@ -178,6 +182,10 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 
 
 func _update_lizard_idle(lizard: Lizard, delta: float) -> void:
+	if _is_night:
+		lizard.state = Lizard.State.EXPLORE
+		lizard.nav_update_target_cooldown = 0.0
+		return
 	var close_to_player := (
 		lizard.global_position.distance_to(_player.global_position)
 		<= _LIZARD_CHASE_DISTANCE
@@ -194,7 +202,7 @@ func _update_lizard_idle(lizard: Lizard, delta: float) -> void:
 func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 	lizard.nav_update_target_cooldown -= delta
 	if lizard.nav_update_target_cooldown <= 0.0:
-		lizard.nav_update_target_cooldown = _NAV_UPDATE_TARGET_DURATION
+		lizard.nav_update_target_cooldown = _NAV_UPDATE_PLAYER_TARGET_DURATION
 		lizard.nav_agent.target_position = _player.global_position
 	lizard.finished_attacking_player_cooldown -= delta
 	var close_to_player := (
@@ -205,6 +213,7 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 		lizard.state = Lizard.State.RETURN_HOME
 		lizard.nav_agent.target_position = lizard.home
 		lizard.nav_update_target_cooldown = 0.0
+		return
 	var lizard_xz := Util.get_vector3_xz(lizard.global_position)
 	var player_xz := Util.get_vector3_xz(_player.global_position)
 	var target_rotation_y := -lizard_xz.angle_to_point(player_xz) + 0.25 * TAU
@@ -218,8 +227,41 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 
 
 func _update_lizard_return_home(lizard: Lizard, delta: float) -> void:
+	if _is_night:
+		lizard.state = Lizard.State.EXPLORE
+		lizard.nav_update_target_cooldown = 0.0
+		return
 	if lizard.nav_agent.is_navigation_finished():
 		lizard.state = Lizard.State.IDLE
+
+
+func _update_lizard_explore(lizard: Lizard, delta: float) -> void:
+	var close_to_player := (
+		lizard.global_position.distance_to(_player.global_position)
+		<= _LIZARD_CHASE_DISTANCE
+	)
+	if close_to_player:
+		lizard.state = Lizard.State.ATTACK
+		lizard.roar_cooldown = 0.0
+		lizard.nav_update_target_cooldown = 0.0
+		lizard.finished_attacking_player_cooldown = (
+			_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
+		)
+		return
+	lizard.nav_update_target_cooldown -= delta
+	if (
+		lizard.nav_update_target_cooldown <= 0.0
+		or lizard.nav_agent.is_navigation_finished()
+	):
+		lizard.nav_update_target_cooldown = _NAV_NEW_EXPLORE_TARGET_DURATION
+		var rand_vec := Vector3(
+			randf_range(-1.0, 1.0),
+			randf_range(-1.0, 1.0),
+			randf_range(-1.0, 1.0)
+		)
+		lizard.nav_agent.target_position = (
+			rand_vec.normalized() * _LIZARD_EXPLORE_DISTANCE
+		)
 
 
 func _update_lizard_nav_agent_velocity(lizard: Lizard, delta: float) -> void:

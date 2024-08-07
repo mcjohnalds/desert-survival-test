@@ -1,4 +1,3 @@
-- Enemy has idle sound
 - Slight enemy damage cooldown
 - Water decreases over time
 - Day/night cycle
@@ -43,3 +42,4 @@
   - Reset finish attacking player cooldown when damage is done or received
 - Make lizard rotate better when navigating through a doorway
 - Make AI move faster when attacking
+- Make lizard rotate to face target when heading home

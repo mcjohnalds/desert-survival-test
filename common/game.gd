@@ -6,10 +6,11 @@ const _GROUNDWATER_SCENE := preload("res://common/groundwater.tscn")
 const _LIZARD_SCENE := preload("res://common/lizard.tscn")
 const _NAV_UPDATE_TARGET_DURATION := 0.2
 const _LIZARD_MAX_RUN_SPEED := 5.0
-const _LIZARD_FINISHED_ATTACKING_PLAYER_DURATION := 10.0
+const _LIZARD_FINISHED_ATTACKING_PLAYER_DURATION := 17.0
 const _LIZARD_CHASE_DISTANCE := 15.0
 const _LIZARD_ACCELERATION := 25.0
 const _LIZARD_FOOTSTEP_DISTANCE := 2.0
+const _LIZARD_ROAR_COOLDOWN_DURATION := 5.0
 var _paused := false
 var _desired_mouse_mode := Input.MOUSE_MODE_VISIBLE
 var _mouse_mode_mismatch_count := 0
@@ -167,6 +168,7 @@ func _update_lizard_idle(lizard: Lizard, delta: float) -> void:
 	)
 	if close_to_player:
 		lizard.state = Lizard.State.ATTACK
+		lizard.roar_cooldown = 0.0
 		lizard.nav_update_target_cooldown = 0.0
 		lizard.finished_attacking_player_cooldown = (
 			_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
@@ -193,6 +195,10 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 	lizard.rotation.y = lerp_angle(
 		lizard.rotation.y, target_rotation_y, 2.0 * delta
 	)
+	lizard.roar_cooldown -= delta
+	if lizard.roar_cooldown <= 0.0:
+		lizard.roar_cooldown = _LIZARD_ROAR_COOLDOWN_DURATION
+		lizard.roar_asp.play()
 
 
 func _update_lizard_return_home(lizard: Lizard, delta: float) -> void:

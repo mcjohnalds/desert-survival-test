@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://d1y8jdicca0ja"]
+[gd_scene load_steps=10 format=3 uid="uid://d1y8jdicca0ja"]
 
 [ext_resource type="Script" path="res://common/game.gd" id="1_nixut"]
 [ext_resource type="PackedScene" uid="uid://cdevl400jk456" path="res://common/terrain.tscn" id="3_0vj7r"]
@@ -26,6 +26,9 @@ tonemap_mode = 2
 ssao_enabled = true
 glow_enabled = true
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hj3kn"]
+albedo_color = Color(0.38, 0.331867, 0.304, 1)
+
 [node name="Game" type="NavigationRegion3D"]
 navigation_mesh = SubResource("NavigationMesh_od0y4")
 script = ExtResource("1_nixut")
@@ -51,6 +54,49 @@ unique_name_in_owner = true
 
 [node name="LizardContainer" type="Node3D" parent="Container"]
 unique_name_in_owner = true
+
+[node name="Home" type="Node3D" parent="Container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.437002, 0)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Container/Home"]
+material_override = SubResource("StandardMaterial3D_hj3kn")
+use_collision = true
+
+[node name="Foundation" type="CSGBox3D" parent="Container/Home/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.5, 2.08165e-12)
+size = Vector3(3, 1, 3)
+
+[node name="Floor" type="CSGBox3D" parent="Container/Home/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.025, 2.08165e-12)
+size = Vector3(3, 0.05, 3)
+
+[node name="Roof" type="CSGBox3D" parent="Container/Home/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.375, 2.08165e-12)
+size = Vector3(3.5, 0.05, 3.5)
+
+[node name="Wall1" type="CSGBox3D" parent="Container/Home/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.475, 1.2, 2.08165e-12)
+size = Vector3(0.05, 2.3, 3)
+
+[node name="Wall2" type="CSGBox3D" parent="Container/Home/CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.475, 1.2, 2.08165e-12)
+size = Vector3(0.05, 2.3, 3)
+
+[node name="Wall3" type="CSGBox3D" parent="Container/Home/CSGCombiner3D"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 6.44764e-08, 1.2, 1.475)
+size = Vector3(0.05, 2.3, 2.9)
+
+[node name="Wall4" type="CSGBox3D" parent="Container/Home/CSGCombiner3D"]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, -1.93425e-07, 1.2, -1.475)
+size = Vector3(0.05, 2.3, 2.9)
+
+[node name="Doorway" type="CSGBox3D" parent="Container/Home/CSGCombiner3D/Wall4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.2, 2.08165e-12)
+operation = 2
+size = Vector3(0.05, 1.9, 1)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="Container/Home/CSGCombiner3D"]
+use_collision = true
 
 [node name="MenuContainer" type="PanelContainer" parent="."]
 unique_name_in_owner = true

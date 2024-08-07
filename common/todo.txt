@@ -1,5 +1,4 @@
 - Home
-  - Walls and roof
   - Interactable door
     - Open/close
       - Just toggle visibility

@@ -1,5 +1,6 @@
-- Day/night cycle
-  - Drain less water at night
+Tasks:
+
+- Only nearest groundwater should make noise
 - Lizard model
 - Lizard animations
 - Lizard animation blending
@@ -40,3 +41,16 @@
 - Make AI move faster when attacking
 - Make lizard rotate to face target when heading home
 - Slight enemy damage cooldown
+- Ground should regen
+  - Maybe regen when not dug for a while
+  - Maybe regen when player is away
+  - Maybe gradual
+
+Big ideas:
+
+- Multiple time-sensitive open loops running at once
+- Start weak, have to stay indoors at night
+- End-game player can dominate the night
+- Game is viscerally enjoyable early and late game
+- Hook player into wanting to dominate the night
+- Make the night scary during early game

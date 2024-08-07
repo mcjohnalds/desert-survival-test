@@ -6,6 +6,7 @@ const _GROUNDWATER_SCENE := preload("res://common/groundwater.tscn")
 const _LIZARD_SCENE := preload("res://common/lizard.tscn")
 const _DAY_ENVIRONMENT := preload("res://common/day_environment.tres")
 const _NIGHT_ENVIRONMENT := preload("res://common/night_environment.tres")
+const _WATER_DRAIN_RATE_SUN := 1.0
 const _NAV_UPDATE_PLAYER_TARGET_DURATION := 0.2
 const _NAV_NEW_EXPLORE_TARGET_DURATION := 10.0
 const _LIZARD_MAX_RUN_SPEED := 5.0
@@ -30,6 +31,7 @@ var _is_night := false
 @onready var _day_light: DirectionalLight3D = %DayLight
 @onready var _night_light: DirectionalLight3D = %NightLight
 @onready var _world_environment: WorldEnvironment = %WorldEnvironment
+@onready var _indoors: Area3D = %Indoors
 
 
 func _ready() -> void:
@@ -46,10 +48,14 @@ func _ready() -> void:
 		groundwater.position.x = randf_range(
 			-_terrain.width / 2.0, _terrain.width / 2.0
 		)
-		groundwater.position.y = _terrain.position.y + randf_range(0.1, 0.9)
 		groundwater.position.z = randf_range(
 			-_terrain.width / 2.0, _terrain.width / 2.0
 		)
+		var h := _terrain.get_height_at_position(groundwater.position)
+		groundwater.position.y = (
+			_terrain.position.y + h - randf_range(0.1, 1.0)
+		)
+		groundwater.position.y = _terrain.position.y + randf_range(0.1, 0.9)
 		_groundwater_container.add_child(groundwater)
 
 
@@ -69,14 +75,15 @@ func _physics_process(delta: float) -> void:
 		var id := groundwater.get_instance_id()
 		# db varies between -40.0 and 0.0 see
 		# https://www.desmos.com/calculator/ldvrpomret
-		var db :=  -20 + 20.0 * pow(sin(100.0 * id + TAU / 8.0 * _time), 1.2)
+		var db :=  -10 + 10.0 * pow(sin(100.0 * id + TAU / 8.0 * _time), 1.2)
 		if is_nan(db):
-			db = -40.0
+			db = -20.0
 		groundwater.muffled_trickle_asp.volume_db = db
 		groundwater.trickle_asp.volume_db = db
 	for lizard: Lizard in _lizard_container.get_children():
 		_update_lizard(lizard, delta)
 	_time += delta
+	_update_water_drain(delta)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -307,6 +314,16 @@ func _on_player_lizard_collision(lizard: Lizard) -> void:
 	)
 	lizard.velocity += player_xz.direction_to(lizard_xz) * 2.0
 	lizard.velocity.y = 5.0
+
+
+func _update_water_drain(delta: float) -> void:
+	var bodies := _indoors.get_overlapping_bodies()
+	var is_player_indoors := false
+	for body in bodies:
+		if body == _player:
+			is_player_indoors = true
+	if not _is_night and not is_player_indoors:
+		_player.water -= _WATER_DRAIN_RATE_SUN * delta
 
 
 func set_mouse_mode(mode: Input.MouseMode) -> void:

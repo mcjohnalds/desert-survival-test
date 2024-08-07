@@ -181,6 +181,7 @@ albedo_color = Color(0.89, 0.89, 0.89, 1)
 material = SubResource("StandardMaterial3D_6dpg6")
 
 [node name="KinematicFpsController" type="CharacterBody3D"]
+collision_layer = 5
 floor_snap_length = 0.5
 script = ExtResource("2_8r0nc")
 material_audios = Array[ExtResource("10_3id2w")]([SubResource("Resource_ju83a"), SubResource("Resource_3rmwo"), SubResource("Resource_rfw5k"), SubResource("Resource_kvpuo")])

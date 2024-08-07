@@ -143,7 +143,10 @@ toggle_day_night={
 
 3d_render/layer_1="default"
 3d_render/layer_2="door"
+3d_physics/layer_1="default"
 3d_navigation/layer_1="default"
+3d_physics/layer_2="door"
+3d_physics/layer_3="indoors"
 
 [navigation]
 

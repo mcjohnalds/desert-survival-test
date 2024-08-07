@@ -29,6 +29,7 @@ volume_db = 3.0
 unit_size = 2.0
 autoplay = true
 max_distance = 8.0
+panning_strength = 4.0
 bus = &"Effects"
 
 [node name="TrickleASP" type="AudioStreamPlayer3D" parent="."]
@@ -36,6 +37,7 @@ stream = ExtResource("3_vf2w4")
 unit_size = 0.2
 autoplay = true
 max_distance = 2.0
+panning_strength = 4.0
 bus = &"Effects"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

@@ -5,13 +5,14 @@ extends Node3D
 # TODO: specify noise texture resolution as export - maybe generate
 # terrain_height_map_texture.tres in memory
 # TODO: fix bug where heightmap is slightly off shader verts
-# TODO: make terrain look less flat
+# TODO: make terrain look less flat (better normals?)
 # TODO: generate shader material at runtime so it doesn't get saved in git
+# TODO: should i handle case where terrain is not centered?
 @export var width := 100
 @export var mesh_resolution := 100
 @export var min_initial_height := 1.0
-@export var max_initial_height := 3.0
-@export var max_height := 3.0
+@export var max_initial_height := 2.0
+@export var max_height := 2.0
 const terrain_height_map := preload(
 	"res://common/terrain_height_map_texture.tres"
 )
@@ -87,7 +88,7 @@ func _regen() -> void:
 	terrain_material.set_shader_parameter("height_map", image_texture)
 
 
-func dig(position_world: Vector3, radius: int, height: float) -> void:
+func dig(position_world: Vector3, radius: float, height: float) -> void:
 	var old_texture: Texture2D = terrain_material.get_shader_parameter(
 		"height_map"
 	)
@@ -97,14 +98,35 @@ func dig(position_world: Vector3, radius: int, height: float) -> void:
 		remap(position_world.x, -m, m, 0.0, image.get_width()),
 		remap(position_world.z, -m, m, 0.0, image.get_width())
 	)
-	var x := floori(position_image.x)
-	var y := floori(position_image.y)
-	var old_r := image.get_pixel(x, y).r
-	var old_height := old_r * max_height
-	var new_height := maxf(old_height - height, 0.0)
-	var new_r := new_height / max_height
-	image.set_pixel(x, y, Color(new_r, 0.0, 0.0, 1.0))
-	var h: HeightMapShape3D = shape.shape
-	h.map_data[image.get_width() * y + x] = new_height
+	var radius_image := remap(radius, 0.0, width, 0.0, image.get_width())
+	var pixel_x_range := range(
+		floori(position_image.x - radius_image / 2.0),
+		ceili(position_image.x + radius_image / 2.0)
+	)
+	var pixel_y_range := range(
+		floori(position_image.y - radius_image / 2.0),
+		ceili(position_image.y + radius_image / 2.0)
+	)
+	for x: int in pixel_x_range:
+		for y: int in pixel_y_range:
+			var old_r := image.get_pixel(x, y).r
+			var old_height := old_r * max_height
+			var new_height := maxf(old_height - height, 0.0)
+			var new_r := new_height / max_height
+			image.set_pixel(x, y, Color(new_r, 0.0, 0.0, 1.0))
+			var height_map_shape: HeightMapShape3D = shape.shape
+			height_map_shape.map_data[image.get_width() * y + x] = new_height
 	var image_texture := ImageTexture.create_from_image(image)
 	terrain_material.set_shader_parameter("height_map", image_texture)
+
+
+func get_height_at_position(pos: Vector3) -> float:
+	var texture: Texture2D = terrain_material.get_shader_parameter(
+		"height_map"
+	)
+	var m := width / 2.0
+	var image := texture.get_image()
+	var image_x := remap(pos.x, -m, m, 0.0, image.get_width())
+	var image_y := remap(pos.z, -m, m, 0.0, image.get_width())
+	var r := image.get_pixel(floori(image_x), floori(image_y)).r
+	return r * max_height

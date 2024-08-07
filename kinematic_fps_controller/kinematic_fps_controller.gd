@@ -5,7 +5,7 @@ signal effect_created(effect: Node3D)
 signal attempted_spawn_enemy(collision: Dictionary)
 signal move_and_slide_collision(collision: KinematicCollision3D)
 const _BULLET_IMPACT_SCENE := preload("res://common/metal_impact.tscn")
-const _AXE_SWING_COOLDOWN_DURATION := 0.05
+const _AXE_SWING_COOLDOWN_DURATION := 1.0
 const _AXE_DISTANCE := 4.0
 @export_group("Audio")
 @export var material_audios: Array[MaterialAudio]
@@ -110,7 +110,7 @@ const _AXE_DISTANCE := 4.0
 @export var health_regen_rate := 5.0
 @export var health_regen_delay := 20.0
 var _health_regen_cooldown := 0.0
-var _water := 100.0
+var water := 100.0
 var _axe_swing_cooldown_remaining := 0.0
 var _sprint_energy := 1.0
 var _last_sprint_cooldown_at := -1000.0
@@ -308,8 +308,7 @@ func _physics_process(delta: float) -> void:
 	_update_muzzle_flash()
 	_update_blood_effects(delta)
 	_update_health_regen(delta)
-	_water -= delta
-	_misc_label.text = "Water: %.f%%" % _water
+	_misc_label.text = "Water: %.f%%" % water
 	_last_is_on_water = is_on_water
 	_last_is_floating = is_floating
 	_last_is_submerged = is_submerged
@@ -363,11 +362,11 @@ func _input(event: InputEvent) -> void:
 			if collision.collider is Terrain:
 				_create_bullet_impact(pos)
 				var terrain: Terrain = collision.collider
-				terrain.dig(pos, 1, 0.4)
+				terrain.dig(pos, 0.7, 0.8)
 			if collision.collider is Groundwater:
 				var groundwater: Groundwater = collision.collider
 				groundwater.queue_free()
-				_water = 100.0
+				water = 100.0
 				_potion_drink_asp.play()
 			if collision.collider is Door:
 				var door: Door = collision.collider

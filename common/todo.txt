@@ -1,4 +1,4 @@
-- Enemy has footstep sound
+- Enemy has idle sound
 - Slight enemy damage cooldown
 - Water decreases over time
 - Day/night cycle
@@ -41,3 +41,5 @@
   - Prevent player from exploiting the fact that the AI will not attack when
     returning home
   - Reset finish attacking player cooldown when damage is done or received
+- Make lizard rotate better when navigating through a doorway
+- Make AI move faster when attacking

@@ -9,6 +9,7 @@ const _LIZARD_MAX_RUN_SPEED := 5.0
 const _LIZARD_FINISHED_ATTACKING_PLAYER_DURATION := 10.0
 const _LIZARD_CHASE_DISTANCE := 15.0
 const _LIZARD_ACCELERATION := 25.0
+const _LIZARD_FOOTSTEP_DISTANCE := 2.0
 var _paused := false
 var _desired_mouse_mode := Input.MOUSE_MODE_VISIBLE
 var _mouse_mode_mismatch_count := 0
@@ -136,9 +137,16 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 	else:
 		lizard.velocity.y -= Util.get_default_gravity() * delta
 	lizard.scale = Vector3.ONE
+	var last_position := lizard.global_position
 	var collided := lizard.move_and_slide()
 	if lizard.is_on_floor():
 		lizard.velocity.y = 0.0
+		lizard.footstep_distance_remaining -= last_position.distance_to(
+			lizard.global_position
+		)
+		if lizard.footstep_distance_remaining <= 0.0:
+			lizard.footstep_distance_remaining += _LIZARD_FOOTSTEP_DISTANCE
+			lizard.step_asp.play()
 	_update_lizard_nav_agent_velocity(lizard, delta)
 	# Player collision handling
 	if not collided:

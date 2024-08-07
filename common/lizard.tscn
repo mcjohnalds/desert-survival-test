@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dsaipbryt8lnb"]
+[gd_scene load_steps=6 format=3 uid="uid://dsaipbryt8lnb"]
 
 [ext_resource type="Script" path="res://common/lizard.gd" id="1_f8wf7"]
+[ext_resource type="AudioStream" uid="uid://dyj8811150sq5" path="res://kinematic_fps_controller/jute-dh-steps/stepdirt_1.wav" id="2_vi2xy"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vpqsf"]
 radius = 0.4
@@ -27,3 +28,8 @@ navigation_layers = 3
 avoidance_enabled = true
 height = 0.5
 radius = 1.0
+
+[node name="StepASP" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_vi2xy")
+unit_size = 1.0
+bus = &"Effects"

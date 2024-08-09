@@ -1,6 +1,24 @@
-[gd_scene load_steps=2 format=3 uid="uid://cdevl400jk456"]
+[gd_scene load_steps=4 format=3 uid="uid://cdevl400jk456"]
 
 [ext_resource type="Script" path="res://terrain_3d/terrain_3d.gd" id="1_pkxwf"]
+[ext_resource type="Material" uid="uid://crgytgwbwd37n" path="res://terrain_3d/material.tres" id="2_hhf5y"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ga3bk"]
+size = Vector2(1, 1)
+subdivide_width = 1000
+subdivide_depth = 1000
 
 [node name="Terrain3D" type="StaticBody3D"]
+editor_description = "We set extra cull margin so that the mesh doesn't disappear when player is deep underground.
+We make the collision shape invisible because it draws a wireframe mesh in the editor which is distracting and laggy."
 script = ExtResource("1_pkxwf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 1, 0, 0, 0, 100, 0, 0, 0)
+material_override = ExtResource("2_hhf5y")
+extra_cull_margin = 16384.0
+mesh = SubResource("PlaneMesh_ga3bk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.0999001, 0, 0, 0, 0.0999001, 0, 0, 0, 0.0999001, 0, 0, 0)
+visible = false

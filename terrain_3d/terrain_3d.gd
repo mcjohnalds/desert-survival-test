@@ -78,6 +78,9 @@ func _regen() -> void:
 	add_child(mesh)
 	material.set_shader_parameter("height_scale", max_height)
 	_height_map_image = _HEIGHT_MAP.get_image()
+	if _height_map_image == null:
+		await _HEIGHT_MAP.changed
+		_height_map_image = _HEIGHT_MAP.get_image()
 	# .get_image() should return a copy of the data according to the docs but it
 	# seems to return a reference so we use use get_region to actually copy
 	_height_map_image = _height_map_image.get_region(

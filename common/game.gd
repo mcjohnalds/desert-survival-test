@@ -95,7 +95,7 @@ func _physics_process(delta: float) -> void:
 			var id := groundwater.get_instance_id()
 			# db varies between -40.0 and 0.0 see
 			# https://www.desmos.com/calculator/ldvrpomret
-			var db :=  (
+			var db := (
 				-10 + 10.0 * pow(sin(100.0 * id + TAU / 8.0 * _time), 1.2)
 			)
 			if is_nan(db):

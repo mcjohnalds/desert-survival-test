@@ -1,4 +1,3 @@
 - Test for bug where heightmap is slightly off shader verts
-- Handle case where terrain is not centered
 - Try doing 2 fewer tex reads in shader
 - Try baking normal map

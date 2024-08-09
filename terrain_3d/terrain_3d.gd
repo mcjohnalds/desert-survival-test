@@ -160,6 +160,7 @@ func dig(point: Vector3, radius: float, dig_depth: float) -> void:
 
 
 func _world_space_to_image_space(v: Vector3) -> Vector2:
+	v = to_local(v)
 	return Vector2(
 		remap(v.x, -length / 2.0, length / 2.0, 0.0, _image_width),
 		remap(v.z, -length / 2.0, length / 2.0, 0.0, _image_width),

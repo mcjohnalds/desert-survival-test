@@ -43,7 +43,6 @@ func _ready() -> void:
 		_on_player_move_and_slide_collision
 	)
 	set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	await _terrain.regen()
 	for i in 100:
 		var groundwater: Groundwater = _GROUNDWATER_SCENE.instantiate()
 		groundwater.position.x = randf_range(

@@ -5,6 +5,7 @@ const _FADE_DURATION = 0.15
 const _LOADER_SCENE := preload("res://common/loader.tscn")
 const _START_SCENE := preload("res://common/start.tscn")
 const _GAME_SCENE := preload("res://common/game.tscn")
+const _HEIGHT_MAP := preload("res://terrain_3d/height_map.tres")
 var _game: Game
 var _fade_out_started_at := -1000.0
 var _fade_in_started_at := -1000.0
@@ -28,6 +29,8 @@ func _ready() -> void:
 		await _fade_out()
 		start.queue_free()
 		await start.tree_exited
+	# Terrain3D will error if added to scene before the height map has loaded
+	await _HEIGHT_MAP.changed
 	_restart()
 
 

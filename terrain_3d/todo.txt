@@ -1,7 +1,4 @@
-- fix bug where terrain regens funny on editor load
 - test for bug where heightmap is slightly off shader verts
-- don't save heightmap image or shape data in git
-  - or, do save data in git and let script load that data
 - handle case where terrain is not centered
 - Try doing 2 fewer tex reads in shader
 - Try baking normal map

@@ -362,7 +362,7 @@ func _input(event: InputEvent) -> void:
 			if collision.collider is Terrain3D:
 				_create_bullet_impact(pos)
 				var terrain: Terrain3D = collision.collider
-				terrain.dig(pos, 6.2, 0.3)
+				terrain.dig(pos, 1.0, 0.5)
 			if collision.collider is Groundwater:
 				var groundwater: Groundwater = collision.collider
 				groundwater.queue_free()

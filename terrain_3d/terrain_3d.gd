@@ -100,8 +100,8 @@ func dig(point: Vector3, radius: float, dig_depth: float) -> void:
 			var point_dist := (Vector2i(x, y) - Vector2i(point_image)).length()
 			if point_dist > radius_image:
 				continue
-			var smoothed_dig_depth := smoothstep(
-				dig_depth, 0.0, point_dist / radius_image
+			var smoothed_dig_depth := dig_depth * smoothstep(
+				0.0, 1.0, 1.0 - float(point_dist) / float(radius_image)
 			)
 			var old_r := _height_map_image.get_pixel(x, y).r
 			var initial_r := _initial_height_map_image.get_pixel(x, y).r
@@ -111,6 +111,7 @@ func dig(point: Vector3, radius: float, dig_depth: float) -> void:
 				old_height - smoothed_dig_depth,
 				initial_height - max_dig_depth
 			)
+			#var new_height := old_height - smoothed_dig_depth
 			var new_r := new_height / max_height
 			_height_map_image.set_pixel(x, y, Color(new_r, 0.0, 0.0, 1.0))
 			var data_index := (_image_width) * y + x
@@ -125,7 +126,3 @@ func get_height_at_position(pos: Vector3) -> float:
 	var image_y := remap(pos.z, -a, a, 0.0, _image_width)
 	var r := _height_map_image.get_pixel(floori(image_x), floori(image_y)).r
 	return r * max_height
-
-
-func x_world_to_image(x: float) -> float:
-	return 1.0

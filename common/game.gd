@@ -25,7 +25,7 @@ var _is_night := false
 @onready var _main_menu: MainMenu = %MainMenu
 @onready var _menu_container: Control = %MenuContainer
 @onready var _player: KinematicFpsController = %Player
-@onready var _terrain: Terrain = %Terrain
+@onready var _terrain: Terrain3D = %Terrain3D
 @onready var _groundwater_container: Node3D = %GroundwaterContainer
 @onready var _lizard_container: Node3D = %LizardContainer
 @onready var _day_light: DirectionalLight3D = %DayLight
@@ -47,10 +47,10 @@ func _ready() -> void:
 	for i in 100:
 		var groundwater: Groundwater = _GROUNDWATER_SCENE.instantiate()
 		groundwater.position.x = randf_range(
-			-_terrain.width / 2.0, _terrain.width / 2.0
+			-_terrain.length / 2.0, _terrain.length / 2.0
 		)
 		groundwater.position.z = randf_range(
-			-_terrain.width / 2.0, _terrain.width / 2.0
+			-_terrain.length / 2.0, _terrain.length / 2.0
 		)
 		var initial_height := _terrain.get_height_at_position(
 			groundwater.position

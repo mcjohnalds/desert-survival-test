@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://common/game.gd" id="1_nixut"]
 [ext_resource type="Environment" uid="uid://cj5a4clofvpeq" path="res://common/day_environment.tres" id="2_d8gdf"]
-[ext_resource type="PackedScene" uid="uid://cdevl400jk456" path="res://common/terrain.tscn" id="3_0vj7r"]
+[ext_resource type="PackedScene" uid="uid://cdevl400jk456" path="res://terrain_3d/terrain_3d.tscn" id="3_0vj7r"]
 [ext_resource type="PackedScene" uid="uid://4xgl4drja75q" path="res://ui/main_menu.tscn" id="3_3ao77"]
 [ext_resource type="PackedScene" uid="uid://2oxdgu03lnbk" path="res://kinematic_fps_controller/kinematic_fps_controller.tscn" id="3_m520b"]
 [ext_resource type="Script" path="res://common/door.gd" id="4_25n3v"]
@@ -56,7 +56,7 @@ environment = ExtResource("2_d8gdf")
 [node name="Player" parent="Container" instance=ExtResource("3_m520b")]
 unique_name_in_owner = true
 
-[node name="Terrain" parent="Container" instance=ExtResource("3_0vj7r")]
+[node name="Terrain3D" parent="Container" instance=ExtResource("3_0vj7r")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -4.83641, 2.08165e-12)
 max_dig_depth = 1.0

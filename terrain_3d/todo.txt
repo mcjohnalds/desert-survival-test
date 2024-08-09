@@ -1,0 +1,6 @@
+- fix bug where terrain regens funny on editor load
+- handle case where not every constant is 100
+- specify height map resource as export
+- test for bug where heightmap is slightly off shader verts
+- generate shader material at runtime so it doesn't get saved in git
+- should i handle case where terrain is not centered?

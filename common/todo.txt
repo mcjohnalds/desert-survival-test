@@ -1,5 +1,6 @@
 Tasks:
 
+- Make terrain less flat
 - Water bottle item
   - Limited "ammo"
   - Drink to restore water level
@@ -7,16 +8,18 @@ Tasks:
 - Lizard model
 - Lizard animations
 - Lizard animation blending
-- Grabbable scrap metal
-  - Grabbable item
-- Grabbable blueprint
-  - Grabbable item
-  - Disappears with message on grab
 - Divining rod
-  - Crafting UI
-  - When equipped, tilts toward water sources
-- Building to explore
-  - Contains scrap metal and blueprint
+- Tech tree progression
+  - Grabbable scrap metal
+    - Grabbable item
+  - Grabbable blueprint
+    - Grabbable item
+    - Disappears with message on grab
+  - Divining rod
+    - Crafting UI
+    - When equipped, tilts toward water sources
+  - Building to explore
+    - Contains scrap metal and blueprint
 - Make axe create impact effect
   - Make axe animation different depending on whether axe hit something
 - Player starts with hand then unlocks axe
@@ -57,3 +60,4 @@ Big ideas:
 - Maybe make everything doable with dumb button mashing - but also reward
   higher displays of skill
 - Maybe don't make the player die, instead, reward players for not dying
+- Random reward

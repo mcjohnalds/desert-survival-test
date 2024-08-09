@@ -1,5 +1,6 @@
+- fix bug where terrain does not load in editor when starting godot editor 
+  (need an await for noise texture)
 - test for bug where heightmap is slightly off shader verts
 - handle case where terrain is not centered
 - Try doing 2 fewer tex reads in shader
 - Try baking normal map
-- Try fixing pixelated texture with trilinear filtering

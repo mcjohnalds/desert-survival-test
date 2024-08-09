@@ -2,7 +2,6 @@
 class_name Terrain3D
 extends Node3D
 
-signal loaded
 const _HEIGHT_MAP := preload("res://terrain_3d/height_map.tres")
 const _MATERIAL := preload("res://terrain_3d/material.tres")
 
@@ -87,7 +86,7 @@ func _regen() -> void:
 	_height_map_image.resize(
 		_image_width,
 		_image_width,
-		Image.Interpolation.INTERPOLATE_LANCZOS
+		Image.Interpolation.INTERPOLATE_CUBIC
 	)
 	_height_map_image.convert(Image.FORMAT_RF)
 	for x in _image_width:
@@ -116,7 +115,6 @@ func _regen() -> void:
 	_initial_height_map_image = _height_map_image.get_region(
 		_height_map_image.get_used_rect()
 	)
-	await loaded
 
 
 func get_height_at_position(point: Vector3) -> float:

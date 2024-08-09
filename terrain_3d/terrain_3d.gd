@@ -82,11 +82,17 @@ func regen() -> void:
 	)
 
 
+func get_height_at_position(pos: Vector3) -> float:
+	var image_x := _world_to_image(pos.x)
+	var image_y := _world_to_image(pos.z)
+	var r := _height_map_image.get_pixel(floori(image_x), floori(image_y)).r
+	return r * max_height
+
+
 func dig(point: Vector3, radius: float, dig_depth: float) -> void:
-	var a := length / 2.0
 	var point_image := Vector2(
-		remap(point.x, -a, a, 0.0, _image_width),
-		remap(point.z, -a, a, 0.0, _image_width)
+		_world_to_image(point.x),
+		_world_to_image(point.z),
 	)
 	var radius_image := remap(radius, 0.0, length, 0.0, _image_width)
 	var x_min_image := floori(point_image.x - radius_image)
@@ -111,7 +117,6 @@ func dig(point: Vector3, radius: float, dig_depth: float) -> void:
 				old_height - smoothed_dig_depth,
 				initial_height - max_dig_depth
 			)
-			#var new_height := old_height - smoothed_dig_depth
 			var new_r := new_height / max_height
 			_height_map_image.set_pixel(x, y, Color(new_r, 0.0, 0.0, 1.0))
 			var data_index := (_image_width) * y + x
@@ -120,9 +125,5 @@ func dig(point: Vector3, radius: float, dig_depth: float) -> void:
 	height_map_shape.map_data = map_data
 
 
-func get_height_at_position(pos: Vector3) -> float:
-	var a := length / 2.0
-	var image_x := remap(pos.x, -a, a, 0.0, _image_width)
-	var image_y := remap(pos.z, -a, a, 0.0, _image_width)
-	var r := _height_map_image.get_pixel(floori(image_x), floori(image_y)).r
-	return r * max_height
+func _world_to_image(x: float) -> float:
+	return remap(x, -length / 2.0, length / 2.0, 0.0, _image_width)

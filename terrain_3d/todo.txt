@@ -1,4 +1,3 @@
-- Test for bug where heightmap is slightly off shader verts
 - Cache data so the terrain loads fast when switching scenes in the editor
 - Try doing 2 fewer tex reads in shader
 - Try baking normal map

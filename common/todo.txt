@@ -1,13 +1,13 @@
 Tasks:
 
-- Make terrain less flat
+- Lizard model
+  - Look at player
+  - Attack animation
+  - Animation blending
 - Water bottle item
   - Limited "ammo"
   - Drink to restore water level
   - Use on water source to fill
-- Lizard model
-- Lizard animations
-- Lizard animation blending
 - Divining rod
 - Tech tree progression
   - Grabbable scrap metal

@@ -12,3 +12,4 @@ var roar_cooldown := 0.0
 @onready var step_asp: AudioStreamPlayer3D = $StepASP
 @onready var roar_asp: AudioStreamPlayer3D = $RoarASP
 @onready var home := global_position
+@onready var animation_player: AnimationPlayer = $Lizard/AnimationPlayer

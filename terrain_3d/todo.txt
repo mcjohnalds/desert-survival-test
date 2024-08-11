@@ -1,4 +1,6 @@
 - Optimize terrain mesh to render faster, especially when mesh is very large
+  - BSP?
+  - Chunks?
 - Optimise dig operation speed
 - Cache data so the terrain loads fast when switching scenes in the editor
 - Try doing 2 fewer tex reads in shader

@@ -160,6 +160,7 @@ func _on_attempted_spawn_enemy(collision: Dictionary) -> void:
 	var lizard: Lizard = _LIZARD_SCENE.instantiate()
 	lizard.position = collision.position
 	_lizard_container.add_child(lizard)
+	lizard.animation_player.play("Walk")
 	lizard.nav_agent.velocity_computed.connect(
 		_on_enemy_velocity_computed.bind(lizard)
 	)
@@ -203,6 +204,10 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 			lizard.footstep_distance_remaining += _LIZARD_FOOTSTEP_DISTANCE
 			lizard.step_asp.play()
 	_update_lizard_nav_agent_velocity(lizard, delta)
+	lizard.animation_player.speed_scale = (
+		2.0 / _LIZARD_MAX_RUN_SPEED
+		* (lizard.velocity * Vector3(1.0, 0.0, 1.0)).length()
+	)
 	# Player collision handling
 	if not collided:
 		return

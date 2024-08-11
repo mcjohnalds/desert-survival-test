@@ -2,11 +2,11 @@ extends CharacterBody3D
 class_name Lizard
 
 enum AIState { IDLE, ATTACK, RETURN_HOME, EXPLORE }
-enum AttackState { IDLE, CHARGE, LUNGE, RECHARGING }
+enum AttackState { READY, CHARGE, RECHARGING }
 var nav_update_target_cooldown := 0.0
 var finished_attacking_player_cooldown := 0.0
 var ai_state := AIState.IDLE
-var attack_state := AttackState.IDLE
+var attack_state := AttackState.READY
 var safe_velocity := Vector3.ZERO
 var footstep_distance_remaining := 0.0
 var roar_cooldown := 0.0

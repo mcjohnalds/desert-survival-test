@@ -39,7 +39,7 @@ const _AXE_DISTANCE := 4.0
 ## respective values, changing it will have consequences on [b]all
 ## abilities[/b] that use velocity.
 @export var base_speed := 5.0
-@export var back_speed := 0.6
+@export var back_speed := 0.4
 @export_group("Walk")
 ## Time for the character to reach full speed
 @export var walk_acceleration := 5.0

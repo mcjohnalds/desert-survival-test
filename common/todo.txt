@@ -1,12 +1,20 @@
 Tasks:
 
 - Lizard
+  - Reset attack state on entering attack state
+  - Fix TODO
+  - Lunge forward, not sideways
   - Apply lunge acceleration over time instead of instantaneously
   - Separate attack and land animation
+  - Fix lunge animation bug where legs stretch funny
   - Sound
   - Animation blending
   - Lead the player
+    - Or maybe just random direction
   - Attempt to clean up lizard update function
+  - Look into animation tree
+  - Only damage player when in correct animation state
+  - Try increasing lizard gravity
 - Make lizard rotate to face target when heading home
 - Water bottle item
   - Limited "ammo"

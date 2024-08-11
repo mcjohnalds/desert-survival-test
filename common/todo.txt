@@ -1,7 +1,6 @@
 Tasks:
 
 - Lizard model
-  - Look at player
   - Attack animation
   - Animation blending
 - Water bottle item

@@ -161,6 +161,7 @@ func _on_attempted_spawn_enemy(collision: Dictionary) -> void:
 	lizard.position = collision.position
 	_lizard_container.add_child(lizard)
 	lizard.animation_player.play("Walk")
+	lizard.skeleton_ik.start()
 	lizard.nav_agent.velocity_computed.connect(
 		_on_enemy_velocity_computed.bind(lizard)
 	)
@@ -236,6 +237,7 @@ func _update_lizard_idle(lizard: Lizard, delta: float) -> void:
 		lizard.finished_attacking_player_cooldown = (
 			_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
 		)
+	_lizard_reset_ik_target(lizard)
 
 
 func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
@@ -263,6 +265,12 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 	if lizard.roar_cooldown <= 0.0:
 		lizard.roar_cooldown = _LIZARD_ROAR_COOLDOWN_DURATION
 		lizard.roar_asp.play()
+	lizard.ik_target.position = lizard.to_local(_player.get_camera().global_position)
+	var head_bone := lizard.skeleton.find_bone("Head")
+	var head_bone_pos_local := lizard.skeleton.get_bone_pose_position(head_bone)
+	var head_bone_pos_global := lizard.skeleton.to_global(head_bone_pos_local)
+	var dir := head_bone_pos_global.direction_to(_player.get_camera().global_position)
+	lizard.ik_target.global_basis = Basis.looking_at(dir, Vector3.UP, true)
 
 
 func _update_lizard_return_home(lizard: Lizard, delta: float) -> void:
@@ -272,6 +280,7 @@ func _update_lizard_return_home(lizard: Lizard, delta: float) -> void:
 		return
 	if lizard.nav_agent.is_navigation_finished():
 		lizard.state = Lizard.State.IDLE
+	_lizard_reset_ik_target(lizard)
 
 
 func _update_lizard_explore(lizard: Lizard, delta: float) -> void:
@@ -301,6 +310,7 @@ func _update_lizard_explore(lizard: Lizard, delta: float) -> void:
 		lizard.nav_agent.target_position = (
 			rand_vec.normalized() * _LIZARD_EXPLORE_DISTANCE
 		)
+	_lizard_reset_ik_target(lizard)
 
 
 func _update_lizard_nav_agent_velocity(lizard: Lizard, delta: float) -> void:
@@ -321,6 +331,11 @@ func _update_lizard_nav_agent_velocity(lizard: Lizard, delta: float) -> void:
 	lizard.nav_agent.velocity = (
 		next_desired_velocity_xz + lizard.velocity.y * Vector3(0.0, 1.0, 0.0)
 	)
+
+
+func _lizard_reset_ik_target(lizard: Lizard) -> void:
+	lizard.ik_target.position = Vector3(0.0, 0.4, 2.0)
+	lizard.basis = Basis.IDENTITY
 
 
 func _on_player_move_and_slide_collision() -> void:

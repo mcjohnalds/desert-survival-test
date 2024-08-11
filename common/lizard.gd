@@ -13,3 +13,6 @@ var roar_cooldown := 0.0
 @onready var roar_asp: AudioStreamPlayer3D = $RoarASP
 @onready var home := global_position
 @onready var animation_player: AnimationPlayer = $Lizard/AnimationPlayer
+@onready var skeleton_ik: SkeletonIK3D = %SkeletonIK3D
+@onready var ik_target: Node3D = $IKTarget
+@onready var skeleton: Skeleton3D = $Lizard/Armature/Skeleton3D

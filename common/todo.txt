@@ -1,8 +1,13 @@
 Tasks:
 
-- Lizard model
-  - Attack animation
+- Lizard
+  - Apply lunge acceleration over time instead of instantaneously
+  - Separate attack and land animation
+  - Sound
   - Animation blending
+  - Lead the player
+  - Attempt to clean up lizard update function
+- Make lizard rotate to face target when heading home
 - Water bottle item
   - Limited "ammo"
   - Drink to restore water level
@@ -40,7 +45,6 @@ Tasks:
   - Reset finish attacking player cooldown when damage is done or received
 - Make lizard rotate better when navigating through a doorway
 - Make AI move faster when attacking
-- Make lizard rotate to face target when heading home
 - Slight enemy damage cooldown
 - Ground should regen
   - Maybe regen when not dug for a while

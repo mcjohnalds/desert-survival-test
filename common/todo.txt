@@ -1,10 +1,8 @@
 Tasks:
 
 - Lizard
-  - Fix TODO
   - Lunge forward, not sideways
   - Apply lunge acceleration over time instead of instantaneously
-  - Separate attack and land animation
   - Fix lunge animation bug where legs stretch funny
   - Sound
   - Animation blending
@@ -12,6 +10,8 @@ Tasks:
     - Or maybe just random direction
   - Attempt to clean up lizard update function
   - Look into animation tree
+  - Do I need to prevent the head from facing backwards when the player gets
+    behind the lizard?
   - Only damage player when in correct animation state
   - Try increasing lizard gravity
 - Make lizard rotate to face target when heading home

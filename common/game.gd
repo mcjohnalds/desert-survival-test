@@ -161,7 +161,6 @@ func _on_attempted_spawn_enemy(collision: Dictionary) -> void:
 	lizard.position = collision.position
 	_lizard_container.add_child(lizard)
 	lizard.animation_player.play("Walk")
-	lizard.animation_player.animation_set_next("Attack", "Walk")
 	lizard.skeleton_ik.start()
 	lizard.nav_agent.velocity_computed.connect(
 		_on_enemy_velocity_computed.bind(lizard)
@@ -234,12 +233,11 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 	lizard.rotation.y = lerp_angle(
 		lizard.rotation.y, target_rotation_y, 2.0 * delta
 	)
-	lizard.ik_target.position = lizard.to_local(_player.get_camera().global_position)
-	var head_bone := lizard.skeleton.find_bone("Head")
-	var head_bone_pos_local := lizard.skeleton.get_bone_pose_position(head_bone)
-	var head_bone_pos_global := lizard.skeleton.to_global(head_bone_pos_local)
-	var dir := head_bone_pos_global.direction_to(_player.get_camera().global_position)
-	lizard.ik_target.global_basis = Basis.looking_at(dir, Vector3.UP, true)
+	_lizard_ik_look_at_player(lizard)
+	var animation_progress := (
+		lizard.animation_player.current_animation_position
+		/ lizard.animation_player.current_animation_length
+	)
 	match lizard.attack_state:
 		Lizard.AttackState.READY:
 			lizard.roar_cooldown -= delta
@@ -250,21 +248,20 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 				lizard.global_position.distance_to(_player.global_position)
 				<= _LIZARD_CHASE_DISTANCE
 			)
-			if not close_to_player or lizard.finished_attacking_player_cooldown <= 0.0:
+			var finished := lizard.finished_attacking_player_cooldown <= 0.0
+			if not close_to_player or finished:
 				_lizard_enter_ai_state(lizard, Lizard.AIState.RETURN_HOME)
-			if lizard.is_on_floor():
-				var player_distance := head_bone_pos_global.distance_to(_player.global_position)
-				if player_distance < 2.0:
-					lizard.animation_player.play("Attack")
+			elif lizard.is_on_floor():
+				var dist := _get_lizard_head_bone_global_position(
+					lizard
+				).distance_to(_player.global_position)
+				if dist < 2.0:
+					lizard.animation_player.play("AttackStart")
 					lizard.attack_state = Lizard.AttackState.CHARGE
 			_lizard_apply_walk_acceleration(lizard, delta)
 		Lizard.AttackState.CHARGE:
-			var animation_progress := (
-				lizard.animation_player.current_animation_position
-				/ lizard.animation_player.current_animation_length
-			)
-			if animation_progress > 0.5:
-				lizard.attack_state = Lizard.AttackState.RECHARGING
+			if animation_progress > 0.7:
+				lizard.attack_state = Lizard.AttackState.FLYING
 				var player_x0z := Vector3(
 					_player.global_position.x,
 					0.0,
@@ -276,12 +273,19 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 					lizard.global_position.z
 				)
 				lizard.velocity += lizard_x0z.direction_to(player_x0z) * 5.0
-				lizard.velocity.y = 5.0
+				lizard.velocity.y = 3.0
 			else:
 				_lizard_apply_stop_acceleration(lizard, delta)
+		Lizard.AttackState.FLYING:
+			if lizard.is_on_floor():
+				lizard.attack_state = Lizard.AttackState.RECHARGING
+				lizard.animation_player.play("AttackEnd")
+			else:
+				_lizard_apply_fall_acceleration(lizard, delta)
 		Lizard.AttackState.RECHARGING:
-			if lizard.animation_player.current_animation != "Attack":
+			if is_equal_approx(animation_progress, 1.0):
 				lizard.attack_state = Lizard.AttackState.READY
+				lizard.animation_player.play("Walk")
 			_lizard_apply_walk_acceleration(lizard, delta)
 
 
@@ -344,6 +348,21 @@ func _update_lizard_nav_agent_velocity(lizard: Lizard, delta: float) -> void:
 func _lizard_reset_ik_target(lizard: Lizard) -> void:
 	lizard.ik_target.position = Vector3(0.0, 0.4, 2.0)
 	lizard.basis = Basis.IDENTITY
+
+
+func _lizard_ik_look_at_player(lizard: Lizard) -> void:
+	var player_pos := _player.get_camera().global_position
+	lizard.ik_target.position = lizard.to_local(player_pos)
+	var dir := _get_lizard_head_bone_global_position(
+		lizard
+	).direction_to(player_pos)
+	lizard.ik_target.global_basis = Basis.looking_at(dir, Vector3.UP, true)
+
+
+func _get_lizard_head_bone_global_position(lizard: Lizard) -> Vector3:
+	var head_bone := lizard.skeleton.find_bone("Head")
+	var head_bone_pos_local := lizard.skeleton.get_bone_pose_position(head_bone)
+	return lizard.skeleton.to_global(head_bone_pos_local)
 
 
 func _on_player_move_and_slide_collision() -> void:
@@ -425,7 +444,6 @@ func _lizard_enter_ai_state(lizard: Lizard, state: Lizard.AIState) -> void:
 			lizard.nav_agent.target_position = lizard.home
 			lizard.nav_update_target_cooldown = 0.0
 		Lizard.AIState.ATTACK:
-			# TODO: animation state?
 			lizard.roar_cooldown = 0.0
 			lizard.nav_update_target_cooldown = 0.0
 			lizard.finished_attacking_player_cooldown = (

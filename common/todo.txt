@@ -1,7 +1,6 @@
 Tasks:
 
 - Lizard
-  - Reset attack state on entering attack state
   - Fix TODO
   - Lunge forward, not sideways
   - Apply lunge acceleration over time instead of instantaneously

@@ -213,20 +213,14 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 
 func _update_lizard_idle(lizard: Lizard, delta: float) -> void:
 	if _is_night:
-		lizard.ai_state = Lizard.AIState.EXPLORE
-		lizard.nav_update_target_cooldown = 0.0
+		_lizard_enter_ai_state(lizard, Lizard.AIState.EXPLORE)
 		return
 	var close_to_player := (
 		lizard.global_position.distance_to(_player.global_position)
 		<= _LIZARD_CHASE_DISTANCE
 	)
 	if close_to_player:
-		lizard.ai_state = Lizard.AIState.ATTACK
-		lizard.roar_cooldown = 0.0
-		lizard.nav_update_target_cooldown = 0.0
-		lizard.finished_attacking_player_cooldown = (
-			_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
-		)
+		_lizard_enter_ai_state(lizard, Lizard.AIState.ATTACK)
 	_lizard_reset_ik_target(lizard)
 	_lizard_apply_stop_acceleration(lizard, delta)
 
@@ -260,9 +254,7 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 				<= _LIZARD_CHASE_DISTANCE
 			)
 			if not close_to_player or lizard.finished_attacking_player_cooldown <= 0.0:
-				lizard.ai_state = Lizard.AIState.RETURN_HOME
-				lizard.nav_agent.target_position = lizard.home
-				lizard.nav_update_target_cooldown = 0.0
+				_lizard_enter_ai_state(lizard, Lizard.AIState.RETURN_HOME)
 			if lizard.is_on_floor():
 				var player_distance := head_bone_pos_global.distance_to(_player.global_position)
 				if player_distance < 2.0:
@@ -298,11 +290,10 @@ func _update_lizard_attack(lizard: Lizard, delta: float) -> void:
 
 func _update_lizard_return_home(lizard: Lizard, delta: float) -> void:
 	if _is_night:
-		lizard.ai_state = Lizard.AIState.EXPLORE
-		lizard.nav_update_target_cooldown = 0.0
+		_lizard_enter_ai_state(lizard, Lizard.AIState.EXPLORE)
 		return
 	if lizard.nav_agent.is_navigation_finished():
-		lizard.ai_state = Lizard.AIState.IDLE
+		_lizard_enter_ai_state(lizard, Lizard.AIState.IDLE)
 	_lizard_reset_ik_target(lizard)
 	_lizard_apply_walk_acceleration(lizard, delta)
 
@@ -313,12 +304,7 @@ func _update_lizard_explore(lizard: Lizard, delta: float) -> void:
 		<= _LIZARD_CHASE_DISTANCE
 	)
 	if close_to_player:
-		lizard.ai_state = Lizard.AIState.ATTACK
-		lizard.roar_cooldown = 0.0
-		lizard.nav_update_target_cooldown = 0.0
-		lizard.finished_attacking_player_cooldown = (
-			_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
-		)
+		_lizard_enter_ai_state(lizard, Lizard.AIState.ATTACK)
 		return
 	lizard.nav_update_target_cooldown -= delta
 	if (
@@ -423,3 +409,22 @@ func _lizard_apply_stop_acceleration(lizard: Lizard, delta: float) -> void:
 	)
 	lizard.velocity.x = new_velocity_xz.x
 	lizard.velocity.z = new_velocity_xz.z
+
+
+func _lizard_enter_ai_state(lizard: Lizard, state: Lizard.AIState) -> void:
+	lizard.ai_state = state
+	match state:
+		Lizard.AIState.EXPLORE:
+			lizard.nav_update_target_cooldown = 0.0
+		Lizard.AIState.RETURN_HOME:
+			lizard.nav_agent.target_position = lizard.home
+			lizard.nav_update_target_cooldown = 0.0
+		Lizard.AIState.ATTACK:
+			# TODO: animation state?
+			lizard.roar_cooldown = 0.0
+			lizard.nav_update_target_cooldown = 0.0
+			lizard.finished_attacking_player_cooldown = (
+				_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
+			)
+			lizard.attack_state = Lizard.AttackState.READY
+			lizard.animation_player.play("Attack")

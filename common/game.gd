@@ -184,20 +184,20 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 			_update_lizard_return_home(lizard, delta)
 		Lizard.AIState.EXPLORE:
 			_update_lizard_explore(lizard, delta)
-	if not lizard.is_on_floor():
-		lizard.velocity.y -= Util.get_default_gravity() * delta
 	lizard.scale = Vector3.ONE
 	var last_position := lizard.global_position
 	lizard.move_and_slide()
-	# TODO: move some of below logic before move_and_slide?
 	if lizard.is_on_floor():
-		lizard.velocity.y = 0.0
 		lizard.footstep_distance_remaining -= last_position.distance_to(
 			lizard.global_position
 		)
 		if lizard.footstep_distance_remaining <= 0.0:
 			lizard.footstep_distance_remaining += _LIZARD_FOOTSTEP_DISTANCE
 			lizard.step_asp.play()
+	for collision in Util.get_character_body_3d_slide_collisions(lizard):
+		if collision.collider == _player:
+			_on_player_lizard_collision(lizard)
+			break
 	_update_lizard_nav_agent_velocity(lizard, delta)
 	if lizard.animation_player.current_animation == "Walk":
 		lizard.animation_player.speed_scale = (
@@ -206,10 +206,7 @@ func _update_lizard(lizard: Lizard, delta: float) -> void:
 		)
 	else:
 		lizard.animation_player.speed_scale = 1.0
-	for collision in Util.get_character_body_3d_slide_collisions(lizard):
-		if collision.collider == _player:
-			_on_player_lizard_collision(lizard)
-			return
+
 
 func _update_lizard_idle(lizard: Lizard, delta: float) -> void:
 	if _is_night:
@@ -354,7 +351,7 @@ func _on_player_move_and_slide_collision() -> void:
 		if collision.collider is Lizard:
 			var lizard: Lizard = collision.collider
 			_on_player_lizard_collision(lizard)
-			return
+			break
 
 
 func _on_player_lizard_collision(lizard: Lizard) -> void:
@@ -389,30 +386,38 @@ func set_mouse_mode(mode: Input.MouseMode) -> void:
 
 
 func _lizard_apply_walk_acceleration(lizard: Lizard, delta: float) -> void:
-	if not lizard.is_on_floor():
-		return
-	var lizard_velocity_xz := lizard.velocity * Vector3(1.0, 0.0, 1.0)
-	var safe_velocity_xz := lizard.safe_velocity * Vector3(1.0, 0.0, 1.0)
-	var new_velocity_xz := lizard_velocity_xz.move_toward(
-		safe_velocity_xz, _LIZARD_ACCELERATION * delta
-	)
-	lizard.velocity.x = new_velocity_xz.x
-	lizard.velocity.z = new_velocity_xz.z
+	if lizard.is_on_floor():
+		var lizard_velocity_xz := lizard.velocity * Vector3(1.0, 0.0, 1.0)
+		var safe_velocity_xz := lizard.safe_velocity * Vector3(1.0, 0.0, 1.0)
+		var new_velocity_xz := lizard_velocity_xz.move_toward(
+			safe_velocity_xz, _LIZARD_ACCELERATION * delta
+		)
+		lizard.velocity.x = new_velocity_xz.x
+		lizard.velocity.z = new_velocity_xz.z
+	_lizard_apply_fall_acceleration(lizard, delta)
 
 
 func _lizard_apply_stop_acceleration(lizard: Lizard, delta: float) -> void:
-	if not lizard.is_on_floor():
-		return
-	var lizard_velocity_xz := lizard.velocity * Vector3(1.0, 0.0, 1.0)
-	var new_velocity_xz := lizard_velocity_xz.move_toward(
-		Vector3.ZERO, _LIZARD_ACCELERATION * delta
-	)
-	lizard.velocity.x = new_velocity_xz.x
-	lizard.velocity.z = new_velocity_xz.z
+	if lizard.is_on_floor():
+		var lizard_velocity_xz := lizard.velocity * Vector3(1.0, 0.0, 1.0)
+		var new_velocity_xz := lizard_velocity_xz.move_toward(
+			Vector3.ZERO, _LIZARD_ACCELERATION * delta
+		)
+		lizard.velocity.x = new_velocity_xz.x
+		lizard.velocity.z = new_velocity_xz.z
+	_lizard_apply_fall_acceleration(lizard, delta)
+
+
+func _lizard_apply_fall_acceleration(lizard: Lizard, delta: float) -> void:
+	if lizard.is_on_floor():
+		lizard.velocity.y = 0.0
+	else:
+		lizard.velocity.y -= Util.get_default_gravity() * delta
 
 
 func _lizard_enter_ai_state(lizard: Lizard, state: Lizard.AIState) -> void:
 	lizard.ai_state = state
+	lizard.animation_player.play("Walk")
 	match state:
 		Lizard.AIState.EXPLORE:
 			lizard.nav_update_target_cooldown = 0.0
@@ -427,4 +432,3 @@ func _lizard_enter_ai_state(lizard: Lizard, state: Lizard.AIState) -> void:
 				_LIZARD_FINISHED_ATTACKING_PLAYER_DURATION
 			)
 			lizard.attack_state = Lizard.AttackState.READY
-			lizard.animation_player.play("Attack")
